@@ -7,7 +7,7 @@ ARG ENV
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN mkdir -p /src/
+RUN mkdir -p /app/
 
 RUN apt-get update \
     && apt-get autoclean && apt-get autoremove \
@@ -22,7 +22,7 @@ COPY pyproject.toml pyproject.toml
 
 RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
 
-COPY src/ /src/
-WORKDIR /src/
+COPY bot/ /app/
+WORKDIR /app/
 
-ENTRYPOINT ["python", "app/main.py"]
+ENTRYPOINT ["python", "main.py"]

@@ -8,7 +8,7 @@ services:
     container_name: ${APP_CONTAINER_NAME}
     build:
       context: .
-      dockerfile: ./src/Dockerfile
+      dockerfile: Dockerfile
       args:
         - ENV=${ENV}
     ulimits:
@@ -28,8 +28,10 @@ services:
     container_name: ${DB_CONTAINER_NAME}
     env_file: .env
     volumes:
-      - ./docker/postgres_data:/var/lib/postgresql/data/
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "5431:5432"
 
+volumes:
+  postgres-data:
 
