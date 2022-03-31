@@ -17,14 +17,10 @@ engine = create_async_engine(
         echo=True,
 )
 
-
-
-# expire_on_commit=False will prevent attributes from being expired
-# after commit.
 async_session = sessionmaker(
         engine, expire_on_commit=False, class_=AsyncSession
 )
 
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-# Base: DeclarativeMeta = declarative_base(class_registry={"UserCategory": UserCategory})
+
+
 Base: DeclarativeMeta = declarative_base()

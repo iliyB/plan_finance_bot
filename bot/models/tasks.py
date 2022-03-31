@@ -6,7 +6,7 @@ from sqlalchemy import (
     Boolean,
     Text,
     SmallInteger,
-    Date,
+    Date, CheckConstraint,
 )
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
@@ -14,22 +14,31 @@ from sqlalchemy.orm import relationship
 from bot.core.database import Base
 
 
-class CompletedTask(Base):
+class BaseWithTimeshift(Base):
+    __abstract__ = True
+
+    timeshift = Column(SmallInteger, nullable=True)
+
+    __table_args__ = (
+        CheckConstraint("timeshift > 0", name="check_positive_timeshift"),
+        {}
+    )
+
+
+class CompletedTask(BaseWithTimeshift):
     __tablename__ = "completed_task"
 
     completed_task_id = Column(Integer, primary_key=True, index=True, unique=True)
-    feedback = Column(String, max_length=1024, nullable=True)
+    feedback = Column(String, nullable=True)
     completed_time = Column(DateTime)
-    timeshift = Column(SmallInteger, min_value=1, nullable=True)
 
 
-class Task(Base):
+class Task(BaseWithTimeshift):
     __tablename__ = "task"
 
     task_id = Column(Integer, primary_key=True, index=True, unique=True)
-    description = Column(Text, max_length=1024, nullable=True)
+    description = Column(Text, nullable=True)
     links = Column(ARRAY(String), nullable=True)
-    timeshift = Column(SmallInteger, min_value=1, nullable=True)
     planed_time = Column(Date, nullable=True)
     is_completed = Column(Boolean, default=False)
 

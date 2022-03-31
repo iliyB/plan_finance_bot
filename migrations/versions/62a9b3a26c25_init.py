@@ -1,8 +1,8 @@
 """init
 
-Revision ID: ef71d5130a92
+Revision ID: 62a9b3a26c25
 Revises: 
-Create Date: 2022-03-31 14:50:48.431135
+Create Date: 2022-03-31 18:09:45.393138
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'ef71d5130a92'
+revision = '62a9b3a26c25'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,25 +26,28 @@ def upgrade():
     )
     op.create_index(op.f('ix_category_category_id'), 'category', ['category_id'], unique=True)
     op.create_table('completed_task',
+    sa.Column('timeshift', sa.SmallInteger(), nullable=True),
     sa.Column('completed_task_id', sa.Integer(), nullable=False),
-    sa.Column('feedback', sa.String(), nullable=True, max_length=1024),
+    sa.Column('feedback', sa.String(), nullable=True),
     sa.Column('completed_time', sa.DateTime(), nullable=True),
-    sa.Column('timeshift', sa.SmallInteger(), nullable=True, min_value=1),
+    sa.CheckConstraint('timeshift > 0', name='check_positive_timeshift'),
     sa.PrimaryKeyConstraint('completed_task_id')
     )
     op.create_index(op.f('ix_completed_task_completed_task_id'), 'completed_task', ['completed_task_id'], unique=True)
     op.create_table('task',
+    sa.Column('timeshift', sa.SmallInteger(), nullable=True),
     sa.Column('task_id', sa.Integer(), nullable=False),
-    sa.Column('description', sa.Text(), nullable=True, max_length=1024),
+    sa.Column('description', sa.Text(), nullable=True),
     sa.Column('links', postgresql.ARRAY(sa.String()), nullable=True),
-    sa.Column('timeshift', sa.SmallInteger(), nullable=True, min_value=1),
     sa.Column('planed_time', sa.Date(), nullable=True),
     sa.Column('is_completed', sa.Boolean(), nullable=True),
+    sa.CheckConstraint('timeshift > 0', name='check_positive_timeshift'),
     sa.PrimaryKeyConstraint('task_id')
     )
     op.create_index(op.f('ix_task_task_id'), 'task', ['task_id'], unique=True)
     op.create_table('user',
     sa.Column('user_id', sa.Integer(), autoincrement=False, nullable=False),
+    sa.CheckConstraint('user_id > 0', name='check_positive_timeshift'),
     sa.PrimaryKeyConstraint('user_id')
     )
     op.create_index(op.f('ix_user_user_id'), 'user', ['user_id'], unique=True)
