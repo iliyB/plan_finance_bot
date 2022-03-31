@@ -1,13 +1,4 @@
-from sqlalchemy import (
-    Column,
-    String,
-    Integer,
-    DateTime,
-    Boolean,
-    Text,
-    SmallInteger,
-    Date, CheckConstraint,
-)
+from sqlalchemy import Boolean, CheckConstraint, Column, Date, DateTime, Integer, SmallInteger, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 
@@ -19,10 +10,7 @@ class BaseWithTimeshift(Base):
 
     timeshift = Column(SmallInteger, nullable=True)
 
-    __table_args__ = (
-        CheckConstraint("timeshift > 0", name="check_positive_timeshift"),
-        {}
-    )
+    __table_args__ = (CheckConstraint("timeshift > 0", name="check_positive_timeshift"), {})  # type: ignore
 
 
 class CompletedTask(BaseWithTimeshift):
@@ -42,15 +30,8 @@ class Task(BaseWithTimeshift):
     planed_time = Column(Date, nullable=True)
     is_completed = Column(Boolean, default=False)
 
-    user = relationship(
-        "User", foreign_keys="task.user", back_populates="tasks"
-    )
-    category = relationship(
-        "Category", foreign_keys="task.category", back_populates="tasks"
-    )
+    user = relationship("User", foreign_keys="task.user", back_populates="tasks")
+    category = relationship("Category", foreign_keys="task.category", back_populates="tasks")
     completed_task = relationship(
-        CompletedTask,
-        foreign_keys="task.completed_task",
-        back_populates="task",
-        uselist=False
+        CompletedTask, foreign_keys="task.completed_task", back_populates="task", uselist=False
     )

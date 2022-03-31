@@ -1,10 +1,10 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, ForeignKey, Integer
 
 from bot.core.database import Base
 
 
 class UserCategory(Base):
-    __tablename__ = 'user_category'
+    __tablename__ = "user_category"
 
     id = Column(Integer, primary_key=True, unique=True)
     user_id = Column(Integer, ForeignKey("user.user_id"))

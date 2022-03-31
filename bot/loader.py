@@ -1,6 +1,6 @@
 import os
 
-from aiogram import Bot, types, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 
 API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")

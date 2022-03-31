@@ -1,7 +1,6 @@
 from aiogram.utils import executor
 from loader import dp
 
-
 # async def on_startup(dp: CustomDispatcher) -> None:
 #     import middlewares
 #     middlewares.setup(dp)

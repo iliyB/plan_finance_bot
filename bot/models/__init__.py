@@ -1,7 +1,7 @@
-from .users import User
 from .categories import Category
-from .tasks import CompletedTask, Task
 from .many_to_many import UserCategory
+from .tasks import CompletedTask, Task
+from .users import User
 
 __all__ = (
     "User",
