@@ -1,2 +1,2 @@
 from .database import Base
-from models import *
+from bot.models import *

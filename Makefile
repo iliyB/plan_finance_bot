@@ -14,6 +14,15 @@ precommit-install:
 lint:
 	pre-commit run --all-files
 
+makemigrations:
+	alembic revision --autogenerate -m "$(name)"
+
+migrate:
+	alembic upgrade head
+
+downgrade:
+	alembic downgrade -1
+
 # makemigrations:
 # # 	docker-compose exec bot -- alembic -c alembic.ini revision --autogenerate -m "$(m)"
 # 	alembic -c src/app/alembic.ini revision --autogenerate -m "$(m)"

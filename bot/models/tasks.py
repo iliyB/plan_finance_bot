@@ -11,34 +11,33 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 
-from core.database import Base
-from models import Category
+from bot.core.database import Base
 
 
 class CompletedTask(Base):
     __tablename__ = "completed_task"
 
     completed_task_id = Column(Integer, primary_key=True, index=True, unique=True)
-    feedback = Column(String, max_length=1024, null=True)
+    feedback = Column(String, max_length=1024, nullable=True)
     completed_time = Column(DateTime)
-    timeshift = Column(SmallInteger, min_value=1, null=True)
+    timeshift = Column(SmallInteger, min_value=1, nullable=True)
 
 
 class Task(Base):
     __tablename__ = "task"
 
     task_id = Column(Integer, primary_key=True, index=True, unique=True)
-    description = Column(Text, max_length=1024, null=True)
-    links = Column(ARRAY(String), null=True)
-    timeshift = Column(SmallInteger, min_value=1, null=True)
-    planed_time = Column(Date, null=True)
+    description = Column(Text, max_length=1024, nullable=True)
+    links = Column(ARRAY(String), nullable=True)
+    timeshift = Column(SmallInteger, min_value=1, nullable=True)
+    planed_time = Column(Date, nullable=True)
     is_completed = Column(Boolean, default=False)
 
     user = relationship(
         "User", foreign_keys="task.user", back_populates="tasks"
     )
     category = relationship(
-        Category, foreign_keys="task.category", back_populates="tasks"
+        "Category", foreign_keys="task.category", back_populates="tasks"
     )
     completed_task = relationship(
         CompletedTask,

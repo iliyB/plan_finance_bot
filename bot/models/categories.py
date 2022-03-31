@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.orm import relationship
 
-from core.database import Base
-from models import UserCategory, User
+from bot.core.database import Base
+from bot.models.many_to_many import UserCategory
 
 
 class Category(Base):
@@ -10,4 +10,4 @@ class Category(Base):
 
     category_id  = Column(Integer, primary_key=True, index=True, unique=True)
     category_name = Column(String, unique=True)
-    users = relationship(User, secondary=UserCategory, back_populates='categories', null=True)
+    users = relationship("User", secondary=UserCategory, back_populates='categories')
