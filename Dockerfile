@@ -2,6 +2,7 @@ FROM python:3.9
 
 ENV POETRY_VERSION=1.1.12
 ENV TELEGRAM_API_TOKEN=""
+ENV PYTHONPATH "${PYTHONPATH}:/app"
 ARG ENV
 
 ENV TZ=Europe/Moscow
@@ -21,8 +22,7 @@ COPY poetry.lock poetry.lock
 COPY pyproject.toml pyproject.toml
 
 RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
-
-COPY bot/ /app/
+COPY bot/ /app/bot
 WORKDIR /app/
 
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["python", "bot/main.py"]

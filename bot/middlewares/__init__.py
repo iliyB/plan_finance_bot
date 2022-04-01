@@ -1,7 +1,7 @@
-# from last.dispatcher import CustomDispatcher
-#
-# from .authorization import AuthorizationMiddleware
-#
-#
-# def setup(dp: CustomDispatcher):
-#     dp.middleware.setup(AuthorizationMiddleware())
+from aiogram import Dispatcher
+
+from .authorization import AuthorizationMiddleware
+
+
+def setup(dp: Dispatcher) -> None:
+    dp.middleware.setup(AuthorizationMiddleware())

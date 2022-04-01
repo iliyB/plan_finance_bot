@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, CheckConstraint, Column, Date, DateTime, Integer, SmallInteger, String, Text
+from sqlalchemy import Boolean, CheckConstraint, Column, Date, DateTime, ForeignKey, Integer, SmallInteger, String, Text
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import relationship
 
@@ -20,6 +20,9 @@ class CompletedTask(BaseWithTimeshift):
     feedback = Column(String, nullable=True)
     completed_time = Column(DateTime)
 
+    task_id = Column(Integer, ForeignKey("task.task_id"))
+    task = relationship("Task", back_populates="completed_task", uselist=False)
+
 
 class Task(BaseWithTimeshift):
     __tablename__ = "task"
@@ -30,8 +33,10 @@ class Task(BaseWithTimeshift):
     planed_time = Column(Date, nullable=True)
     is_completed = Column(Boolean, default=False)
 
-    user = relationship("User", foreign_keys="task.user", back_populates="tasks")
-    category = relationship("Category", foreign_keys="task.category", back_populates="tasks")
-    completed_task = relationship(
-        CompletedTask, foreign_keys="task.completed_task", back_populates="task", uselist=False
-    )
+    user_id = Column(Integer, ForeignKey("user.user_id"))
+    user = relationship("User", back_populates="tasks")
+
+    category_id = Column(Integer, ForeignKey("category.category_id"))
+    category = relationship("Category", back_populates="tasks")
+
+    completed_task = relationship(CompletedTask, back_populates="task")

@@ -11,3 +11,4 @@ class Category(Base):
     category_id = Column(Integer, primary_key=True, index=True, unique=True)
     category_name = Column(String, unique=True)
     users = relationship("User", secondary=UserCategory, back_populates="categories")
+    tasks = relationship("Task", back_populates="category")

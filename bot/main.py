@@ -1,5 +1,6 @@
 from aiogram.utils import executor
-from loader import dp
+
+# from loader import dp
 
 # async def on_startup(dp: CustomDispatcher) -> None:
 #     import middlewares
@@ -13,6 +14,9 @@ from loader import dp
 
 
 if __name__ == "__main__":
-    # from handlers import dp
     # executor.start_polling(dp, skip_updates=True, on_startup=on_startup, on_shutdown=on_shutdown)
+    import middlewares
+    from handlers import dp
+
+    middlewares.setup(dp)
     executor.start_polling(dp, skip_updates=True)
