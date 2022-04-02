@@ -1,10 +1,13 @@
+import logging
+
 from aiogram import types
 from aiogram.dispatcher.middlewares import BaseMiddleware
-from loguru import logger
 
 from bot.core.database import get_async_session
 from bot.models.users import User
 from bot.utils.database import object_to_dict
+
+logger = logging.getLogger(__name__)
 
 
 class AuthorizationMiddleware(BaseMiddleware):

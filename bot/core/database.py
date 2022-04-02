@@ -32,7 +32,7 @@ class Database:
         if not Database.__instance:
             self.engine = create_async_engine(
                 SQLALCHEMY_DATABASE_URL,
-                echo=True,
+                echo=False,
             )
             self.async_session = sessionmaker(self.engine, expire_on_commit=False, class_=AsyncSession)
 
