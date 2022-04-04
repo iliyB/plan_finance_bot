@@ -1,12 +1,14 @@
 from typing import Dict, Tuple
 
 from bot.core.database import get_async_session
+from bot.loggers.decorates import logging_decorator
 from bot.models.users import User
 from bot.utils.database import object_to_dict
 
 
 class UserRepository:
     @staticmethod
+    @logging_decorator
     async def get_or_create(user_id: int) -> Tuple[Dict, bool]:
         async with get_async_session() as session:
             user = await session.get(User, user_id)
