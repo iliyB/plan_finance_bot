@@ -1,5 +1,4 @@
-from .test import dp
+from .auxiliary import dp
+from .categories import dp
 
-# from .expense import dp
-#
 __all__ = ["dp"]

@@ -16,7 +16,7 @@ repos:
     rev: 4.0.1
     hooks:
     - id: flake8
-      exclude: ^(tests/|migrations/)
+      exclude: ^(tests/|migrations/|__init__.py)
       args: [--config, setup.cfg]
 
 -   repo: https://github.com/pre-commit/mirrors-mypy

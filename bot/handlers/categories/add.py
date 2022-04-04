@@ -1,0 +1,21 @@
+import logging
+
+from aiogram import types
+from aiogram.dispatcher import FSMContext
+
+from bot.loader import dp
+from bot.states import FSMAddCategory
+
+logger = logging.getLogger(__name__)
+
+
+@dp.message_handler(commands=["add_category"], state=None)
+async def add_category_start(message: types.Message) -> None:
+    await FSMAddCategory.command.set()
+    await message.reply("Введите название категории")
+
+
+@dp.message_handler(state=FSMAddCategory.command)
+async def add_category_name(message: types.Message, state: FSMContext) -> None:
+    await message.answer(message.text)
+    await state.finish()
