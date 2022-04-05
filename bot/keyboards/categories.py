@@ -9,3 +9,6 @@ category_keyboard.add(
 category_keyboard.add(
     InlineKeyboardButton(CommandEnum.LIST_CATEGORY.value, callback_data=CommandEnum.LIST_CATEGORY.value)
 )
+category_keyboard.add(
+    InlineKeyboardButton(CommandEnum.DEL_CATEGORY.value, callback_data=CommandEnum.DEL_CATEGORY.value)
+)

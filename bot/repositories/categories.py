@@ -48,3 +48,20 @@ class CategoryRepository:
         async with get_async_session() as session:
             categories = await session.execute(select(Category).join(Category.users).where(User.user_id.in_([user_id])))
             return [object_to_dict(category) for category in categories.scalars().all()]
+
+    @staticmethod
+    @logging_decorator(logger)
+    async def delete_category_for_user(category_name: str, user_id: int) -> None:
+        async with get_async_session() as session:
+            category = await session.execute(
+                select(Category).where(Category.category_name == category_name).options(selectinload(Category.users))
+            )
+            category = category.scalars().first()
+
+            if not category:
+                return
+
+            user = await session.get(User, user_id)
+            category.users.remove(user)
+            session.add(category)
+            await session.commit()

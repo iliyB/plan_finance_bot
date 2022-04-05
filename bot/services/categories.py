@@ -22,8 +22,10 @@ class CategoryService:
 
     @staticmethod
     async def all_for_user(user_id: int) -> Optional[List[Dict]]:
+        logger.debug(f"All categories for {user_id}")
         return await CategoryRepository.all_for_user(user_id)
 
     @staticmethod
     async def delete_for_user(category_name: str, user_id: int) -> None:
-        pass
+        logger.debug(f"Delete category {category_name} for {user_id}")
+        return await CategoryRepository.delete_category_for_user(category_name, user_id)
