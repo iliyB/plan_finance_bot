@@ -1,7 +1,11 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.commands import CommandEnum
 
-category_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-category_keyboard.add(KeyboardButton(CommandEnum.ADD_CATEGORY.value_with_slash))
-category_keyboard.add(KeyboardButton(CommandEnum.LIST_CATEGORY.value_with_slash))
+category_keyboard = InlineKeyboardMarkup()
+category_keyboard.add(
+    InlineKeyboardButton(CommandEnum.ADD_CATEGORY.value, callback_data=CommandEnum.ADD_CATEGORY.value)
+)
+category_keyboard.add(
+    InlineKeyboardButton(CommandEnum.LIST_CATEGORY.value, callback_data=CommandEnum.LIST_CATEGORY.value)
+)

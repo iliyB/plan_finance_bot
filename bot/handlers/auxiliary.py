@@ -5,7 +5,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 
 from bot.commands import CommandEnum
-from bot.keyboards import category_keyboard
+from bot.keyboards.auxiliary import main_keyboard
 from bot.loader import dp
 
 logger = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 @dp.message_handler(commands=[CommandEnum.START.value, CommandEnum.HELP.value])
 async def start_command(message: types.Message) -> None:
-    await message.answer("Hello", reply_markup=category_keyboard)
+    await message.answer("Hello", reply_markup=main_keyboard)
 
 
 @dp.message_handler(state="*", commands=[CommandEnum.RESET.value])

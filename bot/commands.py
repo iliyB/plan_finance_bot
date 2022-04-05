@@ -6,6 +6,7 @@ class CommandEnum(Enum):
     HELP = "help"
     RESET = "reset"
 
+    CATEGORY_KEYBOARD = "category_keyboard"
     ADD_CATEGORY = "add_category"
     LIST_CATEGORY = "categories"
     DEL_CATEGORY = "del_category"
