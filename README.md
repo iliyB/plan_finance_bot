@@ -28,4 +28,4 @@ Plan_time_bot - это telegram-bot, который представляет с�
 
 ## Схема
 
-<p align="center"><img width="800" src="data/Scheme_v1"></p>
+<p align="center"><img width="800" src="docs/Scheme_v1.png"></p>
