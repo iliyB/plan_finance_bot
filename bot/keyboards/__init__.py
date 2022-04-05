@@ -1,3 +1,3 @@
-from .categories import category_keyboard
+from .categories import categories_keyboard
 
-__all__ = ["category_keyboard"]
+__all__ = ["categories_keyboard"]

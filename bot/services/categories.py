@@ -8,6 +8,12 @@ logger = logging.getLogger(__name__)
 
 class CategoryService:
     @staticmethod
+    async def get_by_name(category_name: str) -> Dict:
+        logger.debug(f"Get category {category_name}")
+        category, _ = await CategoryRepository.get_or_create_by_name(category_name)
+        return category
+
+    @staticmethod
     async def add_for_user(category_name: str, user_id: int) -> None:
         logger.debug(f"Add category {category_name} for {user_id}")
 

@@ -3,6 +3,7 @@ import logging
 from aiogram import types
 
 from bot.commands import CommandEnum
+from bot.keyboards.categories import create_retrieve_category_keyboard
 from bot.loader import bot, dp
 from bot.services.categories import CategoryService
 
@@ -13,7 +14,9 @@ logger = logging.getLogger(__name__)
 async def list_categories(callback_query: types.CallbackQuery) -> None:
     categories = await CategoryService.all_for_user(callback_query.from_user.id)
     if categories:
-        await bot.send_message(callback_query.from_user.id, categories)
+        await bot.send_message(
+            callback_query.from_user.id, "Ваши категории", reply_markup=create_retrieve_category_keyboard(categories)
+        )
     else:
         await bot.send_message(callback_query.from_user.id, "У вас ещё нет категорий")
 
