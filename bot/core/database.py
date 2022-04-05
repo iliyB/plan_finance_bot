@@ -34,6 +34,7 @@ class Database:
                 SQLALCHEMY_DATABASE_URL,
                 echo=False,
             )
+
             self.async_session = sessionmaker(self.engine, expire_on_commit=False, class_=AsyncSession)
 
     @classmethod
