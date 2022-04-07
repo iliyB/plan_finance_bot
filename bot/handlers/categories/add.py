@@ -1,5 +1,3 @@
-import logging
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
@@ -7,8 +5,6 @@ from bot.commands import CommandEnum
 from bot.loader import bot, dp
 from bot.services.categories import CategoryService
 from bot.states import FSMAddCategory
-
-logger = logging.getLogger(__name__)
 
 
 @dp.callback_query_handler(lambda c: c.data == CommandEnum.ADD_CATEGORY.value, state=None)
