@@ -6,21 +6,18 @@ from aiogram.dispatcher import FSMContext
 from bot.commands import CommandEnum
 from bot.loader import bot, dp
 from bot.services.categories import CategoryService
-from bot.states import FSMDelCategory
+from bot.states import FSMCategory
 
 logger = logging.getLogger(__name__)
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.DEL_CATEGORY.value, state=None)
-async def add_category_start(callback_query: types.CallbackQuery) -> None:
-    await FSMDelCategory.command.set()
+@dp.callback_query_handler(lambda c: c.data == CommandEnum.DEL_CATEGORY.value, state=FSMCategory.category)
+async def delete_category(callback_query: types.CallbackQuery, state: FSMContext) -> None:
+    async with state.proxy() as data:
+        category_name = data.get("category_name")
+
+    await CategoryService.delete_for_user(category_name, callback_query.from_user.id)
     await bot.answer_callback_query(callback_query.id)
-    await bot.send_message(callback_query.from_user.id, "Введите название категории")
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
-
-
-@dp.message_handler(state=FSMDelCategory.command)
-async def add_category_name(message: types.Message, state: FSMContext) -> None:
-    await CategoryService.delete_for_user(message.text, message.from_user.id)
-    await message.reply("OK")
+    await bot.send_message(callback_query.from_user.id, f"Категория {category_name} удаленаы")
     await state.finish()

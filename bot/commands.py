@@ -9,6 +9,8 @@ class CommandEnum(Enum):
     CATEGORY_KEYBOARD = "category_keyboard"
     ADD_CATEGORY = "add_category"
     LIST_CATEGORY = "categories"
+    FILTER_CATEGORY = "filter_category"
+
     DEL_CATEGORY = "del_category"
 
     @property

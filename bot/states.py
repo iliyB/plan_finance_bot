@@ -6,6 +6,7 @@ class FSMAddCategory(StatesGroup):
     name = State()
 
 
-class FSMDelCategory(StatesGroup):
+class FSMCategory(StatesGroup):
+    categories = State()
+    category = State()
     command = State()
-    name = State()

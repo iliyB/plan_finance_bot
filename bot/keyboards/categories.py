@@ -11,8 +11,14 @@ categories_keyboard.add(
 categories_keyboard.add(
     InlineKeyboardButton(CommandEnum.LIST_CATEGORY.value, callback_data=CommandEnum.LIST_CATEGORY.value)
 )
-categories_keyboard.add(
+
+
+retrieve_category_keyboard = InlineKeyboardMarkup()
+retrieve_category_keyboard.add(
     InlineKeyboardButton(CommandEnum.DEL_CATEGORY.value, callback_data=CommandEnum.DEL_CATEGORY.value)
+)
+retrieve_category_keyboard.add(
+    InlineKeyboardButton(CommandEnum.FILTER_CATEGORY.value, callback_data=CommandEnum.FILTER_CATEGORY.value)
 )
 
 

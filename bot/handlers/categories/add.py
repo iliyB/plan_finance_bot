@@ -22,5 +22,6 @@ async def add_category_start(callback_query: types.CallbackQuery) -> None:
 @dp.message_handler(state=FSMAddCategory.command)
 async def add_category_name(message: types.Message, state: FSMContext) -> None:
     await CategoryService.add_for_user(message.text, message.from_user.id)
-    await message.reply("OK")
+    await bot.delete_message(message.from_user.id, message.message_id)
+    await bot.send_message(message.from_user.id, f"Категория {message.text} добавлена")
     await state.finish()
