@@ -1,6 +1,8 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 
 from bot.commands import CommandEnum
 
 main_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 main_keyboard.add(KeyboardButton(CommandEnum.CATEGORY_KEYBOARD.value_with_slash))
+
+reset_button_inline = InlineKeyboardButton(CommandEnum.RESET.value, callback_data=CommandEnum.RESET.value)

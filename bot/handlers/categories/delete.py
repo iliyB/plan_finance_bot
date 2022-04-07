@@ -19,5 +19,5 @@ async def delete_category(callback_query: types.CallbackQuery, state: FSMContext
     await CategoryService.delete_for_user(category_name, callback_query.from_user.id)
     await bot.answer_callback_query(callback_query.id)
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
-    await bot.send_message(callback_query.from_user.id, f"Категория {category_name} удаленаы")
+    await bot.send_message(callback_query.from_user.id, f"Категория {category_name} удалена")
     await state.finish()
