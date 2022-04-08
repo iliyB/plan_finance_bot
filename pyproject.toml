@@ -15,6 +15,7 @@ asyncpg = "^0.25.0"
 python-dotenv = "^0.20.0"
 PyYAML = "^6.0"
 types-PyYAML = "^6.0.5"
+pydantic-sqlalchemy = "^0.0.9"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"

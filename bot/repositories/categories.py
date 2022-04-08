@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import List, Tuple
 
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
@@ -8,7 +8,7 @@ from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
 from bot.models.categories import Category
 from bot.models.users import User
-from bot.utils.database import object_to_dict
+from bot.schemes.categories import CategoryCreateScheme, CategoryScheme
 
 logger = logging.getLogger(__name__)
 
@@ -16,18 +16,18 @@ logger = logging.getLogger(__name__)
 class CategoryRepository:
     @staticmethod
     @logging_decorator(logger)
-    async def get_or_create_by_name(category_name: str) -> Tuple[Dict, bool]:
+    async def get_or_create_by_name(category_name: str) -> Tuple[CategoryScheme, bool]:
         async with get_async_session() as session:
             category = await session.execute(select(Category).where(Category.category_name == category_name))
             category = category.scalars().first()
 
             if not category:
-                session.add(Category(category_name=category_name))
+                session.add(Category(**CategoryCreateScheme(category_name=category_name).dict()))
                 await session.commit()
                 category = await session.execute(select(Category).where(Category.category_name == category_name))
-                return object_to_dict(category.scalars().first()), True
+                return CategoryScheme.from_orm(category.scalars().first()), True
             else:
-                return object_to_dict(category), False
+                return CategoryScheme.from_orm(category), False
 
     @staticmethod
     @logging_decorator(logger)
@@ -44,10 +44,10 @@ class CategoryRepository:
 
     @staticmethod
     @logging_decorator(logger)
-    async def all_for_user(user_id: int) -> Optional[List[Dict]]:
+    async def all_for_user(user_id: int) -> List[CategoryScheme]:
         async with get_async_session() as session:
             categories = await session.execute(select(Category).join(Category.users).where(User.user_id.in_([user_id])))
-            return [object_to_dict(category) for category in categories.scalars().all()]
+            return [CategoryScheme.from_orm(category) for category in categories.scalars().all()]
 
     @staticmethod
     @logging_decorator(logger)

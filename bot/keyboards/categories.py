@@ -1,9 +1,10 @@
-from typing import Dict, List
+from typing import List
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.commands import CommandEnum
 from bot.keyboards.auxiliary import reset_button_inline
+from bot.schemes.categories import CategoryScheme
 
 categories_keyboard = InlineKeyboardMarkup()
 categories_keyboard.add(
@@ -25,11 +26,11 @@ retrieve_category_keyboard.add(
 retrieve_category_keyboard.add(reset_button_inline)
 
 
-def create_retrieve_category_keyboard(categories: List[Dict]) -> InlineKeyboardMarkup:
+def create_retrieve_category_keyboard(categories: List[CategoryScheme]) -> InlineKeyboardMarkup:
     category_keyboard = InlineKeyboardMarkup()
     for category in categories:
         category_keyboard.add(
-            InlineKeyboardButton(category["category_name"], callback_data=f"category_{category['category_name']}")
+            InlineKeyboardButton(category.category_name, callback_data=f"category_{category.category_name}")
         )
 
     category_keyboard.add(reset_button_inline)
