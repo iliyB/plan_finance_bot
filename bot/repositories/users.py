@@ -4,7 +4,7 @@ from typing import Tuple
 from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
 from bot.models.users import User
-from bot.schemes.users import UserCreateScheme, UserScheme
+from bot.schemes.users import UserIdScheme, UserScheme
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class UserRepository:
             user = await session.get(User, user_id)
 
             if not user:
-                session.add(User(**UserCreateScheme(user_id=user_id).dict()))
+                session.add(User(user_id=user_id))
                 await session.commit()
                 user = await session.get(User, user_id)
                 return UserScheme.from_orm(user), True

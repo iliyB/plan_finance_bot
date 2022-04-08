@@ -8,7 +8,7 @@ from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
 from bot.models.categories import Category
 from bot.models.users import User
-from bot.schemes.categories import CategoryCreateScheme, CategoryScheme
+from bot.schemes.categories import CategoryNameScheme, CategoryScheme
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class CategoryRepository:
             category = category.scalars().first()
 
             if not category:
-                session.add(Category(**CategoryCreateScheme(category_name=category_name).dict()))
+                session.add(Category(category_name=category_name))
                 await session.commit()
                 category = await session.execute(select(Category).where(Category.category_name == category_name))
                 return CategoryScheme.from_orm(category.scalars().first()), True
