@@ -9,3 +9,11 @@ class FSMAddCategory(StatesGroup):
 class FSMCategory(StatesGroup):
     categories = State()
     category = State()
+
+
+class FSMAddTask(StatesGroup):
+    category = State()
+    description = State()
+    planed_time = State()
+    timeshift = State()
+    links = State()

@@ -16,6 +16,17 @@ fast = ["uvloop (>=0.16.0,<0.17.0)", "ujson (>=1.35)"]
 proxy = ["aiohttp-socks (>=0.5.3,<0.6.0)"]
 
 [[package]]
+name = "aiogram-calendar"
+version = "0.1.1"
+description = "Simple Inline Calendar & Date Selection tool for Aiogram Telegram bots"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+aiogram = "*"
+
+[[package]]
 name = "aiohttp"
 version = "3.8.1"
 description = "Async http client/server framework (asyncio)"
@@ -486,12 +497,15 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "19b591be076157736b534ac011ce5110684202035c95b475051536398e2a0b02"
+content-hash = "2a3b56a997126035136a2f72162d7b81d37d15c0614df750eca2d3036c84260b"
 
 [metadata.files]
 aiogram = [
     {file = "aiogram-2.19-py3-none-any.whl", hash = "sha256:1ffb7e22e7d06bab0009cc2e9d5191a74273c8c482b0b782dcfde3deeeccbef0"},
     {file = "aiogram-2.19.tar.gz", hash = "sha256:60ef7564a6fd2def9057d6f097ac18da99346a758a25fad3f6a552c6672baabe"},
+]
+aiogram-calendar = [
+    {file = "aiogram_calendar-0.1.1.tar.gz", hash = "sha256:002b49b2814df446c26b0d7b62321865d02af0cfeed83888d41f4f531b61ac19"},
 ]
 aiohttp = [
     {file = "aiohttp-3.8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:1ed0b6477896559f17b9eaeb6d38e07f7f9ffe40b9f0f9627ae8b9926ae260a8"},
