@@ -8,7 +8,7 @@ from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
 from bot.models.categories import Category
 from bot.models.users import User
-from bot.schemes.categories import CategoryNameScheme, CategoryScheme
+from bot.schemes.categories import CategoryScheme
 
 logger = logging.getLogger(__name__)
 
@@ -16,18 +16,23 @@ logger = logging.getLogger(__name__)
 class CategoryRepository:
     @staticmethod
     @logging_decorator(logger)
-    async def get_or_create_by_name(category_name: str) -> Tuple[CategoryScheme, bool]:
+    async def get_or_create_by_name(category_name: str, return_pydantic: bool = True) -> Tuple[CategoryScheme, bool]:
         async with get_async_session() as session:
             category = await session.execute(select(Category).where(Category.category_name == category_name))
             category = category.scalars().first()
+            created = False
 
             if not category:
                 session.add(Category(category_name=category_name))
                 await session.commit()
                 category = await session.execute(select(Category).where(Category.category_name == category_name))
-                return CategoryScheme.from_orm(category.scalars().first()), True
-            else:
-                return CategoryScheme.from_orm(category), False
+                category = category.scalars().first()
+                created = True
+
+            if not return_pydantic:
+                return category, created
+
+            return CategoryScheme.from_orm(category), created
 
     @staticmethod
     @logging_decorator(logger)
