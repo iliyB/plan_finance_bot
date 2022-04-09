@@ -1,11 +1,14 @@
 import logging
+from typing import List
+
+from sqlalchemy.future import select
 
 from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
 from bot.models.tasks import Task
 from bot.models.users import User
 from bot.repositories.categories import CategoryRepository
-from bot.schemes.tasks import TaskCreateScheme
+from bot.schemes.tasks import TaskCreateScheme, TaskScheme
 
 logger = logging.getLogger(__name__)
 
@@ -28,3 +31,11 @@ class TaskRepository:
             )
             session.add(task)
             await session.commit()
+
+    @staticmethod
+    @logging_decorator(logger)
+    async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
+        async with get_async_session() as session:
+            user = await session.get(User, user_id)
+            tasks = await session.execute(select(Task).where(Task.user == user))
+            return [TaskScheme.from_orm(task) for task in tasks.scalars().all()]

@@ -26,3 +26,12 @@ async def reset_handler_state_callback(callback_query: types.CallbackQuery, stat
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
     if await state.get_state():
         await state.finish()
+
+
+# @dp.message_handler(commands=["test"])
+# async def test(message: types.Message) -> None:
+#     # await bot.send_message(message.from_user.id, dir(message))
+#     await bot.send_message(message.from_user.id, dir(message.from_user))
+#     await bot.send_message(message.from_user.id, dir(message.from_user.locale))
+#     await bot.send_message(message.from_user.id, dir(message.from_user.locale.meta_zones))
+#     await bot.send_message(message.from_user.id, dir(message.from_user.locale.currencies))
