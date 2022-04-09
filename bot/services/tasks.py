@@ -1,3 +1,4 @@
+import datetime
 from typing import List
 
 from bot.repositories.tasks import TaskRepository
@@ -12,3 +13,17 @@ class TaskService:
     @staticmethod
     async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
         return await TaskRepository.all_planed_tasks_for_user(user_id)
+
+    @staticmethod
+    async def all_planed_tasks_for_user_on_today(user_id: int) -> List[TaskScheme]:
+        return await TaskRepository.all_planed_tasks_for_user_on_today(user_id)
+
+    @staticmethod
+    async def all_planed_tasks_for_user_on_week(user_id: int) -> List[TaskScheme]:
+        return await TaskRepository.all_planed_tasks_for_user_on_week(user_id)
+
+    @staticmethod
+    async def all_planed_tasks_for_user_on_period(
+        user_id: int, first_date: datetime.date, second_date: datetime.date
+    ) -> List[TaskScheme]:
+        return await TaskRepository.all_planed_tasks_for_user_on_period(user_id, first_date, second_date)

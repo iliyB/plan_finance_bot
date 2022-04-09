@@ -17,3 +17,8 @@ class FSMAddTask(StatesGroup):
     planed_time = State()
     timeshift = State()
     links = State()
+
+
+class FSMDatePeriod(StatesGroup):
+    first_date = State()
+    second_date = State()
