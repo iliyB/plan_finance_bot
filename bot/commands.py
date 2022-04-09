@@ -18,6 +18,11 @@ class CommandEnum(Enum):
     FILTER_TASK = "Фильтрация задач"
     DEL_TASK = "Удалить задачу"
 
+    ALL_PLANED_TASKS = "Все задачи"
+    TODAY_TASKS = "На сегодня"
+    WEEKLY_TASKS = "На ближайшую неделю"
+    PERIOD_TIME_TASKS = "В определенном промежутке времени"
+
     @property
     def value_with_slash(self) -> str:
         return f"/{self.value}"
