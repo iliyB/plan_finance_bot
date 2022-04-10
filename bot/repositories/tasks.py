@@ -35,6 +35,13 @@ class TaskRepository:
 
     @staticmethod
     @logging_decorator(logger)
+    async def get_task(task_id: int) -> Optional[TaskScheme]:
+        async with get_async_session() as session:
+            task = await session.get(Task, task_id)
+            return TaskScheme.from_orm(task) if task else None
+
+    @staticmethod
+    @logging_decorator(logger)
     async def planed_tasks_for_user(user_id: int, delta_day: Optional[int] = None) -> List[TaskScheme]:
         tasks = (
             await TaskRepository._get_user_tasks(

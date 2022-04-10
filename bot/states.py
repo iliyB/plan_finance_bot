@@ -19,6 +19,11 @@ class FSMAddTask(StatesGroup):
     links = State()
 
 
+class FSMTask(StatesGroup):
+    tasks = State()
+    task = State()
+
+
 class FSMDatePeriod(StatesGroup):
     first_date = State()
     second_date = State()

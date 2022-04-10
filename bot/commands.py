@@ -16,12 +16,15 @@ class CommandEnum(Enum):
     ADD_TASK = "Добавить задачу"
     LIST_TASK = "Мои задачи"
     FILTER_TASK = "Фильтрация задач"
-    DEL_TASK = "Удалить задачу"
 
     ALL_PLANED_TASKS = "Все задачи"
     TODAY_TASKS = "На сегодня"
     WEEKLY_TASKS = "На ближайшую неделю"
     PERIOD_TIME_TASKS = "В определенном промежутке времени"
+
+    COMPLETE_TASK = "Выполнить задачу"
+    CHANGE_TASK = "Редактировать задачу"
+    DEL_TASK = "Удалить задачу"
 
     @property
     def value_with_slash(self) -> str:

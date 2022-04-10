@@ -1,7 +1,10 @@
+from typing import List
+
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from bot.commands import CommandEnum
 from bot.keyboards.auxiliary import reset_inline_button
+from bot.schemes.tasks import TaskScheme
 
 tasks_keyboard = InlineKeyboardMarkup()
 tasks_keyboard.add(InlineKeyboardButton(CommandEnum.ADD_TASK.value, callback_data=CommandEnum.ADD_TASK.value))
@@ -21,3 +24,24 @@ my_tasks_keyboard.add(
     InlineKeyboardButton(CommandEnum.ALL_PLANED_TASKS.value, callback_data=CommandEnum.ALL_PLANED_TASKS.value)
 )
 my_tasks_keyboard.add(reset_inline_button)
+
+retrieve_task_keyboard = InlineKeyboardMarkup()
+retrieve_task_keyboard.add(
+    InlineKeyboardButton(CommandEnum.COMPLETE_TASK.value, callback_data=CommandEnum.COMPLETE_TASK.value)
+)
+retrieve_task_keyboard.add(
+    InlineKeyboardButton(CommandEnum.CHANGE_TASK.value, callback_data=CommandEnum.CHANGE_TASK.value)
+)
+retrieve_task_keyboard.add(InlineKeyboardButton(CommandEnum.DEL_TASK.value, callback_data=CommandEnum.DEL_TASK.value))
+retrieve_task_keyboard.add(reset_inline_button)
+
+
+def create_retrieve_task_keyboard(tasks: List[TaskScheme]) -> InlineKeyboardMarkup:
+    task_keyboard = InlineKeyboardMarkup()
+    for task in tasks:
+        task_keyboard.add(
+            InlineKeyboardButton(f"{task.description[:10]}:{task.planed_time}", callback_data=f"task_{task.task_id}")
+        )
+
+    task_keyboard.add(reset_inline_button)
+    return task_keyboard

@@ -5,10 +5,10 @@ from aiogram.dispatcher import FSMContext
 from aiogram_calendar import SimpleCalendar, simple_cal_callback
 
 from bot.commands import CommandEnum
-from bot.keyboards.tasks import my_tasks_keyboard
+from bot.keyboards.tasks import create_retrieve_task_keyboard, my_tasks_keyboard
 from bot.loader import bot, dp
 from bot.services.tasks import TaskService
-from bot.states import FSMDatePeriod
+from bot.states import FSMDatePeriod, FSMTask
 
 
 @dp.callback_query_handler(lambda c: c.data == CommandEnum.LIST_TASK.value)
@@ -17,32 +17,35 @@ async def task_list(callback_query: types.CallbackQuery) -> None:
     await bot.send_message(callback_query.from_user.id, "Выберите промежуток времени", reply_markup=my_tasks_keyboard)
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.ALL_PLANED_TASKS.value)
+@dp.callback_query_handler(lambda c: c.data == CommandEnum.ALL_PLANED_TASKS.value, state=None)
 async def all_planed_task(callback_query: types.CallbackQuery) -> None:
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
     tasks = await TaskService.all_planed_tasks_for_user(callback_query.from_user.id)
     if tasks:
-        await bot.send_message(callback_query.from_user.id, tasks)
+        await bot.send_message(callback_query.from_user.id, "Задачи", reply_markup=create_retrieve_task_keyboard(tasks))
+        await FSMTask.tasks.set()
     else:
         await bot.send_message(callback_query.from_user.id, "У вас нет запланированных задач")
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.TODAY_TASKS.value)
+@dp.callback_query_handler(lambda c: c.data == CommandEnum.TODAY_TASKS.value, state=None)
 async def task_on_today(callback_query: types.CallbackQuery) -> None:
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
     tasks = await TaskService.all_planed_tasks_for_user_on_today(callback_query.from_user.id)
     if tasks:
-        await bot.send_message(callback_query.from_user.id, tasks)
+        await bot.send_message(callback_query.from_user.id, "Задачи", reply_markup=create_retrieve_task_keyboard(tasks))
+        await FSMTask.tasks.set()
     else:
         await bot.send_message(callback_query.from_user.id, "У вас нет запланированных задач")
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.WEEKLY_TASKS.value)
+@dp.callback_query_handler(lambda c: c.data == CommandEnum.WEEKLY_TASKS.value, state=None)
 async def task_on_week(callback_query: types.CallbackQuery) -> None:
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
     tasks = await TaskService.all_planed_tasks_for_user_on_week(callback_query.from_user.id)
     if tasks:
-        await bot.send_message(callback_query.from_user.id, tasks)
+        await bot.send_message(callback_query.from_user.id, "Задачи", reply_markup=create_retrieve_task_keyboard(tasks))
+        await FSMTask.tasks.set()
     else:
         await bot.send_message(callback_query.from_user.id, "У вас нет запланированных задач")
 
@@ -83,9 +86,12 @@ async def task_second_date(callback_query: types.CallbackQuery, state: FSMContex
                 callback_query.from_user.id, data["first_date"], date
             )
             if tasks:
-                await bot.send_message(callback_query.from_user.id, tasks)
+                await bot.send_message(
+                    callback_query.from_user.id, "Задачи", reply_markup=create_retrieve_task_keyboard(tasks)
+                )
+                await state.finish()
+                await FSMTask.tasks.set()
             else:
                 await bot.send_message(callback_query.from_user.id, "У вас нет запланированных задач")
 
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
-    await state.finish()

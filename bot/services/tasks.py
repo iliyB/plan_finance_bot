@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Optional
 
 from bot.repositories.tasks import TaskRepository
 from bot.schemes.tasks import TaskCreateScheme, TaskScheme
@@ -9,6 +9,10 @@ class TaskService:
     @staticmethod
     async def create(task_create_data: TaskCreateScheme) -> None:
         await TaskRepository.create_task(task_create_data)
+
+    @staticmethod
+    async def get(task_id: int) -> Optional[TaskScheme]:
+        return await TaskRepository.get_task(task_id)
 
     @staticmethod
     async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
