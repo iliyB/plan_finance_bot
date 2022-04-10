@@ -12,15 +12,15 @@ class TaskService:
 
     @staticmethod
     async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
-        return await TaskRepository.all_planed_tasks_for_user(user_id)
+        return await TaskRepository.planed_tasks_for_user(user_id)
 
     @staticmethod
     async def all_planed_tasks_for_user_on_today(user_id: int) -> List[TaskScheme]:
-        return await TaskRepository.all_planed_tasks_for_user_on_today(user_id)
+        return await TaskRepository.planed_tasks_for_user(user_id, delta_day=0)
 
     @staticmethod
     async def all_planed_tasks_for_user_on_week(user_id: int) -> List[TaskScheme]:
-        return await TaskRepository.all_planed_tasks_for_user_on_week(user_id)
+        return await TaskRepository.planed_tasks_for_user(user_id, delta_day=7)
 
     @staticmethod
     async def all_planed_tasks_for_user_on_period(

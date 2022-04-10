@@ -1,8 +1,7 @@
 import datetime
 import logging
-from typing import List
+from typing import List, Optional
 
-from sqlalchemy import and_
 from sqlalchemy.future import select
 
 from bot.core.database import get_async_session
@@ -36,56 +35,38 @@ class TaskRepository:
 
     @staticmethod
     @logging_decorator(logger)
-    async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
-        async with get_async_session() as session:
-            user = await session.get(User, user_id)
-            tasks = await session.execute(
-                select(Task).where(
-                    Task.user == user, Task.planed_time >= datetime.date.today(), Task.completed_task == None
-                )
+    async def planed_tasks_for_user(user_id: int, delta_day: Optional[int] = None) -> List[TaskScheme]:
+        tasks = (
+            await TaskRepository._get_user_tasks(
+                user_id, datetime.date.today(), datetime.date.today() + datetime.timedelta(days=delta_day)
             )
-            return [TaskScheme.from_orm(task) for task in tasks.scalars().all()]
+            if delta_day is not None
+            else await TaskRepository._get_user_tasks(user_id, datetime.date.today())
+        )
 
-    @staticmethod
-    @logging_decorator(logger)
-    async def all_planed_tasks_for_user_on_today(user_id: int) -> List[TaskScheme]:
-        async with get_async_session() as session:
-            user = await session.get(User, user_id)
-            tasks = await session.execute(
-                select(Task).where(
-                    Task.user == user, Task.planed_time == datetime.date.today(), Task.completed_task == None
-                )
-            )
-            return [TaskScheme.from_orm(task) for task in tasks.scalars().all()]
-
-    @staticmethod
-    @logging_decorator(logger)
-    async def all_planed_tasks_for_user_on_week(user_id: int) -> List[TaskScheme]:
-        async with get_async_session() as session:
-            user = await session.get(User, user_id)
-            tasks = await session.execute(
-                select(Task).where(
-                    Task.user == user,
-                    Task.planed_time >= datetime.date.today(),
-                    Task.planed_time <= datetime.date.today() + datetime.timedelta(days=7),
-                    Task.completed_task == None,
-                )
-            )
-            return [TaskScheme.from_orm(task) for task in tasks.scalars().all()]
+        return [TaskScheme.from_orm(task) for task in tasks]
 
     @staticmethod
     @logging_decorator(logger)
     async def all_planed_tasks_for_user_on_period(
         user_id: int, first_date: datetime.date, second_date: datetime.date
     ) -> List[TaskScheme]:
+        tasks = await TaskRepository._get_user_tasks(user_id, first_date, second_date)
+        return [TaskScheme.from_orm(task) for task in tasks]
+
+    @staticmethod
+    async def _get_user_tasks(
+        user_id: int, first_date: datetime.date, second_date: Optional[datetime.date] = None
+    ) -> List[Task]:
         async with get_async_session() as session:
             user = await session.get(User, user_id)
-            tasks = await session.execute(
-                select(Task).where(
-                    Task.user == user,
-                    Task.planed_time >= first_date,
-                    Task.planed_time <= second_date,
-                    Task.completed_task == None,
-                )
+            sql = select(Task).where(
+                Task.user == user,
+                Task.planed_time >= first_date,
+                Task.completed_task == None,
             )
-            return [TaskScheme.from_orm(task) for task in tasks.scalars().all()]
+            if second_date:
+                sql = sql.where(Task.planed_time <= second_date)
+
+            tasks = await session.execute(sql)
+            return tasks.scalars().all()
