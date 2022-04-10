@@ -68,7 +68,7 @@ async def add_links(message: types.Message, state: FSMContext) -> None:
             data["timeshift"] = int(message.text)
         except Exception:
             data["timeshift"] = None
-        await TaskService.create(TaskCreateScheme(**data, user_id=message.from_user.id))
+        await TaskService.create_task(TaskCreateScheme(**data, user_id=message.from_user.id))
     await state.finish()
     await bot.delete_message(message.from_user.id, message.message_id)
 

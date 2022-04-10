@@ -3,6 +3,7 @@ import logging
 from typing import List, Optional
 
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
@@ -38,6 +39,10 @@ class TaskRepository:
     async def get_task(task_id: int) -> Optional[TaskScheme]:
         async with get_async_session() as session:
             task = await session.get(Task, task_id)
+            # task = await session.execute(
+            #     select(Task).where(Task.task_id == task_id).options(selectinload(Task.category))
+            # )
+            # task = task.scalars().first()
             return TaskScheme.from_orm(task) if task else None
 
     @staticmethod

@@ -32,6 +32,14 @@ services:
     ports:
       - "5431:5432"
 
+  bot_redis:
+    image: redis:5-alpine
+    container_name: ${REDIS_CONTAINER_NAME}
+    env_file: .env
+    restart: on-failure
+    volumes:
+      - redis-data:/data
+
 volumes:
   postgres-data:
-
+  redis-data:

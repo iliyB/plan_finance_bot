@@ -1,3 +1,4 @@
+import logging
 import re
 
 from aiogram import types
@@ -12,16 +13,16 @@ from bot.states import FSMTask
 
 @dp.callback_query_handler(lambda c: re.match("task_[0-9]*", c.data), state=FSMTask.tasks)
 async def retrieve_task(callback_query: types.CallbackQuery, state: FSMContext) -> None:
-    task = await TaskService.get(int(callback_query.data.split("_")[-1]))
+    task = await TaskService.get_task(int(callback_query.data.split("_")[-1]))
     if not task:
         await state.finish()
         return
     async with state.proxy() as data:
-        data["task"] = task
+        data["task"] = task.json()
 
     task_card = (
         f"{hbold(task.description)}\n"
-        # f"{hbold(task.category)}\n"
+        f"{hbold(task.category_id)}\n"
         f"{hbold(task.planed_time)}\n"
         f"{hbold(task.timeshift)}"
     )

@@ -7,11 +7,11 @@ from bot.schemes.tasks import TaskCreateScheme, TaskScheme
 
 class TaskService:
     @staticmethod
-    async def create(task_create_data: TaskCreateScheme) -> None:
+    async def create_task(task_create_data: TaskCreateScheme) -> None:
         await TaskRepository.create_task(task_create_data)
 
     @staticmethod
-    async def get(task_id: int) -> Optional[TaskScheme]:
+    async def get_task(task_id: int) -> Optional[TaskScheme]:
         return await TaskRepository.get_task(task_id)
 
     @staticmethod
