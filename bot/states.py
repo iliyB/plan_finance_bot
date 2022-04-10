@@ -24,6 +24,19 @@ class FSMTask(StatesGroup):
     task = State()
 
 
+class FSMCompletedTask(StatesGroup):
+    feedback = State()
+    completed_time = State()
+    timeshift = State()
+
+
+class FSMChangeTask(StatesGroup):
+    category = State()
+    description = State()
+    planed_time = State()
+    timeshift = State()
+
+
 class FSMDatePeriod(StatesGroup):
     first_date = State()
     second_date = State()
