@@ -19,6 +19,7 @@ async def retrieve_task(callback_query: types.CallbackQuery, state: FSMContext) 
         return
     async with state.proxy() as data:
         data["task"] = task.json()
+        data["task_id"] = task.task_id
 
     task_card = (
         f"{hbold(task.description)}\n"

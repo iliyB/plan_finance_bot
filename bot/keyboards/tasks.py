@@ -1,6 +1,8 @@
+import logging
 from typing import List
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.utils.emoji import emojize
 
 from bot.commands import CommandEnum
 from bot.keyboards.auxiliary import reset_inline_button
@@ -39,9 +41,11 @@ retrieve_task_keyboard.add(reset_inline_button)
 def create_retrieve_task_keyboard(tasks: List[TaskScheme]) -> InlineKeyboardMarkup:
     task_keyboard = InlineKeyboardMarkup()
     for task in tasks:
+        emoji = emojize(":white_check_mark:") if task.is_completed else emojize(":x:")
         task_keyboard.add(
-            InlineKeyboardButton(f"{task.description[:10]}:{task.planed_time}", callback_data=f"task_{task.task_id}")
+            InlineKeyboardButton(
+                f"{emoji}{task.description[:15]}:{task.planed_time}", callback_data=f"task_{task.task_id}"
+            )
         )
-
     task_keyboard.add(reset_inline_button)
     return task_keyboard

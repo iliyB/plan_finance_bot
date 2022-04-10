@@ -15,6 +15,10 @@ class TaskService:
         return await TaskRepository.get_task(task_id)
 
     @staticmethod
+    async def delete_task(task_id: int) -> None:
+        await TaskRepository.delete_task(task_id)
+
+    @staticmethod
     async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:
         return await TaskRepository.planed_tasks_for_user(user_id)
 

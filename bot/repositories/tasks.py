@@ -47,6 +47,15 @@ class TaskRepository:
 
     @staticmethod
     @logging_decorator(logger)
+    async def delete_task(task_id: int) -> None:
+        async with get_async_session() as session:
+            task = await session.get(Task, task_id)
+            if task:
+                await session.delete(task)
+                await session.commit()
+
+    @staticmethod
+    @logging_decorator(logger)
     async def planed_tasks_for_user(user_id: int, delta_day: Optional[int] = None) -> List[TaskScheme]:
         tasks = (
             await TaskRepository._get_user_tasks(
@@ -75,7 +84,7 @@ class TaskRepository:
             sql = select(Task).where(
                 Task.user == user,
                 Task.planed_time >= first_date,
-                Task.completed_task == None,
+                # Task.completed_task == None,
             )
             if second_date:
                 sql = sql.where(Task.planed_time <= second_date)
