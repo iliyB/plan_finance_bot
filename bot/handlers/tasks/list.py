@@ -1,3 +1,5 @@
+import datetime
+import logging
 from typing import Dict
 
 from aiogram import types
@@ -65,7 +67,7 @@ async def task_first_date(callback_query: types.CallbackQuery, state: FSMContext
     if not selected:
         return
     async with state.proxy() as data:
-        data["first_date"] = date
+        data["first_date"] = str(date.date())
     await bot.send_message(
         callback_query.from_user.id, "Выберите конечную дату", reply_markup=await SimpleCalendar().start_calendar()
     )
@@ -79,12 +81,12 @@ async def task_second_date(callback_query: types.CallbackQuery, state: FSMContex
     if not selected:
         return
     async with state.proxy() as data:
-        if data["first_date"] > date:
+        first_date = datetime.datetime.strptime(data["first_date"], "%Y-%m-%d")
+
+        if first_date > date:
             await bot.send_message(callback_query.from_user.id, "Первая дата больше второй")
         else:
-            tasks = await TaskService.all_planed_tasks_for_user_on_period(
-                callback_query.from_user.id, data["first_date"], date
-            )
+            tasks = await TaskService.all_planed_tasks_for_user_on_period(callback_query.from_user.id, first_date, date)
             if tasks:
                 await bot.send_message(
                     callback_query.from_user.id, "Задачи", reply_markup=create_retrieve_task_keyboard(tasks)

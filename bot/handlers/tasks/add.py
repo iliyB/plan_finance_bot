@@ -55,7 +55,7 @@ async def add_timeshift(callback_query: types.CallbackQuery, state: FSMContext, 
     if not selected:
         return
     async with state.proxy() as data:
-        data["planed_time"] = date
+        data["planed_time"] = str(date.date())
     await bot.send_message(callback_query.from_user.id, "Укажите время на выполнение задачи")
     await FSMAddTask.next()
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)

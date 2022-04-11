@@ -41,7 +41,7 @@ async def completed_time_task(callback_query: types.CallbackQuery, state: FSMCon
     if not selected:
         return
     async with state.proxy() as data:
-        data["completed_date"] = date
+        data["completed_date"] = str(date.date())
 
     await bot.send_message(callback_query.from_user.id, "Укажите затраченное время")
     await FSMCompletedTask.next()
