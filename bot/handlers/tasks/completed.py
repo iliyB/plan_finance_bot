@@ -9,6 +9,8 @@ from aiogram_calendar import SimpleCalendar, simple_cal_callback
 
 from bot.commands import CommandEnum
 from bot.loader import bot, dp
+from bot.schemes.tasks import TaskCompleteScheme
+from bot.services.tasks import TaskService
 from bot.states import FSMCompletedTask, FSMTask
 
 
@@ -41,9 +43,13 @@ async def completed_time_task(callback_query: types.CallbackQuery, state: FSMCon
     if not selected:
         return
     async with state.proxy() as data:
-        data["completed_date"] = str(date.date())
+        data["completed_time"] = str(date.date())
+        timeshift = json.loads(data["task"]).get("timeshift")
 
-    await bot.send_message(callback_query.from_user.id, "Укажите затраченное время")
+    await bot.send_message(
+        callback_query.from_user.id,
+        f"Запланированное затраченное время  - {timeshift if timeshift else 'Нет'}\nУкажите затраченное время",
+    )
     await FSMCompletedTask.next()
     await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
 
@@ -55,7 +61,16 @@ async def timeshift_task(message: types.Message, state: FSMContext) -> None:
             data["timeshift"] = int(message.text)
         except Exception:
             data["timeshift"] = None
-        await bot.send_message(message.from_user.id, data)
 
+        await TaskService.completed_task(
+            TaskCompleteScheme(
+                task_id=data["task_id"],
+                feedback=data["feedback"],
+                completed_time=data["completed_time"],
+                timeshift=data["timeshift"],
+            )
+        )
+
+    await bot.send_message(message.from_user.id, "Ok")
     await state.finish()
     await bot.delete_message(message.from_user.id, message.message_id)

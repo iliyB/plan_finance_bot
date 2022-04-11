@@ -2,7 +2,7 @@ import datetime
 from typing import List, Optional
 
 from bot.repositories.tasks import TaskRepository
-from bot.schemes.tasks import TaskCreateScheme, TaskScheme
+from bot.schemes.tasks import TaskCompleteScheme, TaskCreateScheme, TaskScheme
 
 
 class TaskService:
@@ -17,6 +17,10 @@ class TaskService:
     @staticmethod
     async def delete_task(task_id: int) -> None:
         await TaskRepository.delete_task(task_id)
+
+    @staticmethod
+    async def completed_task(task_data: TaskCompleteScheme) -> None:
+        await TaskRepository.completed_task(task_data)
 
     @staticmethod
     async def all_planed_tasks_for_user(user_id: int) -> List[TaskScheme]:

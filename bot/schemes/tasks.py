@@ -16,3 +16,10 @@ class TaskCreateScheme(BaseModel):
     planed_time: date = Field(...)
     timeshift: Optional[int]
     user_id: int = Field(min_value=1)
+
+
+class TaskCompleteScheme(BaseModel):
+    task_id: int = Field(...)
+    feedback: str = Field(max_length=512)
+    completed_time: date = Field(...)
+    timeshift: int = Field(max_value=20000)

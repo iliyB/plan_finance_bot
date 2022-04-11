@@ -7,10 +7,10 @@ from sqlalchemy.orm import selectinload
 
 from bot.core.database import get_async_session
 from bot.loggers.decorates import logging_decorator
-from bot.models.tasks import Task
+from bot.models.tasks import CompletedTask, Task
 from bot.models.users import User
 from bot.repositories.categories import CategoryRepository
-from bot.schemes.tasks import TaskCreateScheme, TaskScheme
+from bot.schemes.tasks import TaskCompleteScheme, TaskCreateScheme, TaskScheme
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,22 @@ class TaskRepository:
             task = await session.get(Task, task_id)
             if task:
                 await session.delete(task)
+                await session.commit()
+
+    @staticmethod
+    @logging_decorator(logger)
+    async def completed_task(task_data: TaskCompleteScheme) -> None:
+        async with get_async_session() as session:
+            task = await session.get(Task, task_data.task_id)
+            if task:
+                task.is_completed = True
+                completed_task = CompletedTask(
+                    feedback=task_data.feedback,
+                    completed_time=task_data.completed_time,
+                    timeshift=task_data.timeshift,
+                    task=task,
+                )
+                session.add(task, completed_task)
                 await session.commit()
 
     @staticmethod
