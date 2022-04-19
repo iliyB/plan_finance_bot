@@ -1,8 +1,8 @@
 from aiogram import types
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
 from bot.keyboards.categories import create_retrieve_category_keyboard
-from bot.loader import bot, dp
 from bot.services.categories import CategoryService
 from bot.states import FSMCategory
 

@@ -20,6 +20,8 @@ services:
       driver: journald
     env_file:
       - .env
+    ports:
+      - 127.0.0.1:${PORT_APP}:8000
     depends_on:
       - bot_db
 

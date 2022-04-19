@@ -1,12 +1,17 @@
-from aiogram import Dispatcher, types
+from typing import Dict
+
+from aiogram import Bot, Dispatcher, types
 from aiogram.utils import executor
+from fastapi import FastAPI
 
-from bot import loggers
+from bot import config, loggers, middlewares
+from bot.bot import bot
 from bot.commands import CommandEnum
-from bot.loader import bot
+
+app = FastAPI()
 
 
-async def set_commands(dispatcher: Dispatcher) -> None:
+async def set_commands(bot: Bot) -> None:
     commands = [
         types.BotCommand(command=CommandEnum.START.name.lower(), description=CommandEnum.START.value),
         types.BotCommand(
@@ -18,10 +23,27 @@ async def set_commands(dispatcher: Dispatcher) -> None:
     await bot.set_my_commands(commands)
 
 
-if __name__ == "__main__":
-    import middlewares
+@app.on_event("startup")
+async def on_startup() -> None:
+    webhook_info = await bot.get_webhook_info()
+    if webhook_info.url != config.WEBHOOK_URL:
+        await bot.set_webhook(url=config.WEBHOOK_URL)
+    await set_commands(bot)
+
+
+@app.post(config.WEBHOOK_PATH)
+async def bot_webhook(update: Dict) -> None:
+    telegram_update = types.Update(**update)
+
     from handlers import dp
 
     middlewares.setup(dp)
     loggers.setup()
-    executor.start_polling(dp, skip_updates=True, on_startup=set_commands)
+    Dispatcher.set_current(dp)
+    Bot.set_current(bot)
+    await dp.process_update(telegram_update)
+
+
+@app.on_event("shutdown")
+async def on_shutdown() -> None:
+    await bot.session.close()

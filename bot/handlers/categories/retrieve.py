@@ -3,8 +3,8 @@ import re
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+from bot.bot import bot, dp
 from bot.keyboards.categories import retrieve_category_keyboard
-from bot.loader import bot, dp
 from bot.states import FSMCategory
 
 

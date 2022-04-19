@@ -7,8 +7,8 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram_calendar import SimpleCalendar, simple_cal_callback
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
-from bot.loader import bot, dp
 from bot.schemes.tasks import TaskCompleteScheme
 from bot.services.tasks import TaskService
 from bot.states import FSMCompletedTask, FSMTask

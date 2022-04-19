@@ -1,8 +1,8 @@
 from aiogram import types
 from aiogram.dispatcher import FSMContext
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
-from bot.loader import bot, dp
 from bot.services.tasks import TaskService
 from bot.states import FSMTask
 

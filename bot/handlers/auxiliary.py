@@ -2,15 +2,15 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
 from bot.keyboards.auxiliary import main_keyboard
-from bot.loader import bot, dp
 
 
 @dp.message_handler(commands=CommandEnum.START.name.lower())
 @dp.message_handler(commands=CommandEnum.HELP.name.lower())
 async def start_command(message: types.Message) -> None:
-    await message.answer("Hello", reply_markup=main_keyboard)
+    await message.answer("Hello")
     await bot.delete_message(message.from_user.id, message.message_id)
 
 

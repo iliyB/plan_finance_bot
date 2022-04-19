@@ -6,9 +6,9 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram_calendar import SimpleCalendar, simple_cal_callback
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
 from bot.keyboards.tasks import create_retrieve_task_keyboard, my_tasks_keyboard
-from bot.loader import bot, dp
 from bot.services.tasks import TaskService
 from bot.states import FSMDatePeriod, FSMTask
 

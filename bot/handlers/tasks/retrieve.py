@@ -5,8 +5,8 @@ from aiogram import types
 from aiogram.dispatcher import FSMContext
 from aiogram.utils.markdown import hbold
 
+from bot.bot import bot, dp
 from bot.keyboards.tasks import retrieve_task_keyboard
-from bot.loader import bot, dp
 from bot.services.tasks import TaskService
 from bot.states import FSMTask
 

@@ -1,8 +1,8 @@
 from aiogram import types
 
+from bot.bot import bot, dp
 from bot.commands import CommandEnum
 from bot.keyboards.tasks import tasks_keyboard
-from bot.loader import bot, dp
 
 
 @dp.message_handler(commands=CommandEnum.TASK_KEYBOARD.name.lower())

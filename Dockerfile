@@ -25,4 +25,6 @@ RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
 COPY bot/ /app/bot
 WORKDIR /app/
 
-ENTRYPOINT ["python", "bot/main.py"]
+ENTRYPOINT ["uvicorn", "bot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+#ENTRYPOINT ["python", "bot/main.py"]
