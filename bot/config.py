@@ -13,4 +13,4 @@ POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
 POSTGRES_DB = os.environ.get("POSTGRES_DB")
 
 WEBHOOK_PATH = f"/bot/{API_TOKEN}"
-WEBHOOK_URL = f"{os.environ.get('HOST')}:{os.environ.get('PORT_APP')}{WEBHOOK_PATH}"
+WEBHOOK_URL = f"{os.environ.get('HOST')}{WEBHOOK_PATH}"

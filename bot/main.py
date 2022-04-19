@@ -1,12 +1,12 @@
 from typing import Dict
 
 from aiogram import Bot, Dispatcher, types
-from aiogram.utils import executor
 from fastapi import FastAPI
 
 from bot import config, loggers, middlewares
 from bot.bot import bot
 from bot.commands import CommandEnum
+from bot.handlers import dp
 
 app = FastAPI()
 
@@ -29,16 +29,14 @@ async def on_startup() -> None:
     if webhook_info.url != config.WEBHOOK_URL:
         await bot.set_webhook(url=config.WEBHOOK_URL)
     await set_commands(bot)
+    middlewares.setup(dp)
+    loggers.setup()
 
 
 @app.post(config.WEBHOOK_PATH)
 async def bot_webhook(update: Dict) -> None:
     telegram_update = types.Update(**update)
 
-    from handlers import dp
-
-    middlewares.setup(dp)
-    loggers.setup()
     Dispatcher.set_current(dp)
     Bot.set_current(bot)
     await dp.process_update(telegram_update)
