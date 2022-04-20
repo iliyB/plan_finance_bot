@@ -31,8 +31,13 @@ async def reset_handler_state_callback(callback_query: types.CallbackQuery, stat
 
 # @dp.message_handler(commands=["test"])
 # async def test(message: types.Message) -> None:
-#     # await bot.send_message(message.from_user.id, dir(message))
-#     await bot.send_message(message.from_user.id, dir(message.from_user))
-#     await bot.send_message(message.from_user.id, dir(message.from_user.locale))
-#     await bot.send_message(message.from_user.id, dir(message.from_user.locale.meta_zones))
-#     await bot.send_message(message.from_user.id, dir(message.from_user.locale.currencies))
+# await bot.send_message(message.from_user.id, dir(message))
+# await bot.send_message(message.from_user.id, dir(message.from_user))
+# print(dir(message.from_user))
+# print(message.from_user)
+# print(message.from_user.first_name)
+# print(message.from_user.last_name)
+# print(message.from_user.username)
+# await bot.send_message(message.from_user.id, dir(message.from_user.locale))
+# await bot.send_message(message.from_user.id, dir(message.from_user.locale.meta_zones))
+# await bot.send_message(message.from_user.id, dir(message.from_user.locale.currencies))

@@ -12,7 +12,6 @@ RUN mkdir -p /app/
 
 RUN apt-get update \
     && apt-get autoclean && apt-get autoremove \
-    && apt-get install sqlite3 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  \
     && pip install "poetry==$POETRY_VERSION" \
@@ -20,11 +19,12 @@ RUN apt-get update \
 
 COPY poetry.lock poetry.lock
 COPY pyproject.toml pyproject.toml
+COPY alembic.ini alembic.ini
 
 RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
 COPY bot/ /app/bot
 WORKDIR /app/
 
-ENTRYPOINT ["uvicorn", "bot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "bot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 #ENTRYPOINT ["python", "bot/main.py"]

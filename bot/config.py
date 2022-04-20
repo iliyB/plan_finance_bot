@@ -1,5 +1,4 @@
 import os
-import socket
 
 API_TOKEN = os.environ.get("TELEGRAM_API_TOKEN")
 REDIS_HOST = os.environ.get("REDIS_CONTAINER_NAME")

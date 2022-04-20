@@ -11,9 +11,9 @@ dotenv_path = find_dotenv()
 if dotenv_path:
     load_dotenv(dotenv_path)
     SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@localhost:5431/{}".format(
-        config.POSTGRES_USER,
-        config.POSTGRES_PASSWORD,
-        config.POSTGRES_DB,
+        os.environ.get("POSTGRES_USER"),
+        os.environ.get("POSTGRES_PASSWORD"),
+        os.environ.get("POSTGRES_DB"),
     )
 else:
     SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
