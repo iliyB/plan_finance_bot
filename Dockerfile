@@ -1,6 +1,6 @@
-FROM python:3.9
+FROM python:3.10
 
-ENV POETRY_VERSION=1.1.12
+ENV POETRY_VERSION=1.1.14
 ENV TELEGRAM_API_TOKEN=""
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 ARG ENV
@@ -23,6 +23,7 @@ COPY alembic.ini alembic.ini
 
 RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
 COPY bot/ /app/bot
+COPY bot/ /app/migrations
 WORKDIR /app/
 
 CMD ["uvicorn", "bot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

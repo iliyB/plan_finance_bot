@@ -7,8 +7,8 @@ REDIS_DB_FSM = os.environ.get("REDIS_DB_FSM")
 
 POSTGRES_USER = os.environ.get("POSTGRES_USER")
 POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
+POSTGRES_HOST = os.environ.get("DB_CONTAINER_NAME")
+POSTGRES_PORT = os.environ.get("PORT_DB")
 POSTGRES_DB = os.environ.get("POSTGRES_DB")
 
 WEBHOOK_PATH = f"/bot/{API_TOKEN}"
