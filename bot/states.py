@@ -8,7 +8,7 @@ class FSMAddCategory(StatesGroup):
 
 class FSMCategory(StatesGroup):
     categories = State()
-    category = State()  # test
+    category = State()  # test3
 
 
 class FSMAddTask(StatesGroup):
