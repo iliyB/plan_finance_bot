@@ -6,7 +6,7 @@ repos:
       exclude: ^(tests/|migrations/)
 
 -   repo: https://github.com/ambv/black
-    rev: 21.12b0
+    rev: 22.6.0
     hooks:
     - id: black
       exclude: ^(tests/|migrations/)
