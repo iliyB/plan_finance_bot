@@ -17,15 +17,15 @@ RUN apt-get update \
     && pip install "poetry==$POETRY_VERSION" \
     && poetry config virtualenvs.create false
 
-COPY poetry.lock poetry.lock
-COPY pyproject.toml pyproject.toml
-COPY alembic.ini alembic.ini
 
-RUN poetry install $(if test "$ENV" = prod; then echo "--no-dev"; fi)
 COPY bot/ /app/bot
 COPY bot/ /app/migrations
 WORKDIR /app/
 
-CMD ["uvicorn", "bot.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+COPY poetry.lock poetry.lock
+COPY pyproject.toml pyproject.toml
+COPY alembic.ini alembic.ini
 
-#ENTRYPOINT ["python", "bot/main.py"]
+RUN poetry install --no-root $(if test "$ENV" = prod; then echo "--no-dev"; fi)
+
+CMD ["python", "bot/main.py"]

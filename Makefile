@@ -14,16 +14,11 @@ precommit-install:
 lint:
 	pre-commit run --all-files
 
-path:
-	docker-compose run --rm --no-deps bot_app ls
-	docker-compose run --rm --no-deps bot_app pwd
-	docker-compose run --rm --no-deps bot_app ls app
-
 makemigrations:
-	alembic revision --autogenerate -m "$(name)"
+	docker-compose run --rm bot alembic revision --autogenerate -m "$(name)"
 
 migrate:
-	alembic upgrade head
+	docker-compose run --rm bot alembic upgrade head
 
 downgrade:
-	alembic downgrade -1
+	docker-compose run --rm bot alembic downgrade -1

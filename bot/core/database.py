@@ -1,30 +1,18 @@
-import os
-
-from dotenv import find_dotenv, load_dotenv
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from bot import config
+from config import configs
 
-dotenv_path = find_dotenv()
-if dotenv_path:
-    load_dotenv(dotenv_path)
-    SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@localhost:5431/{}".format(
-        os.environ.get("POSTGRES_USER"),
-        os.environ.get("POSTGRES_PASSWORD"),
-        os.environ.get("POSTGRES_DB"),
-    )
-else:
-    SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
-        config.POSTGRES_USER,
-        config.POSTGRES_PASSWORD,
-        config.POSTGRES_HOST,
-        config.POSTGRES_PORT,
-        config.POSTGRES_DB,
-    )
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
+    configs.POSTGRES_USER,
+    configs.POSTGRES_PASSWORD,
+    configs.POSTGRES_HOST,
+    configs.POSTGRES_PORT,
+    configs.POSTGRES_DB,
+)
 
-Base: DeclarativeMeta = declarative_base()
+Base = declarative_base()
 
 
 class Database:

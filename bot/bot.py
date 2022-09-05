@@ -1,9 +1,12 @@
 from aiogram import Bot, Dispatcher, types
-from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from aiogram.fsm.storage.redis import RedisStorage
+from config import configs
 
-from bot import config
+redis_url = f"redis://@{configs.REDIS_HOST}:{configs.REDIS_PORT}/{configs.REDIS_DB_FSM}"
 
-storage = RedisStorage2(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB_FSM)
+redis = RedisStorage.from_url(redis_url)
 
-bot = Bot(token=config.API_TOKEN, parse_mode=types.ParseMode.HTML)
-dp = Dispatcher(bot, storage=storage)
+storage = RedisStorage(redis=redis)
+
+bot = Bot(token=configs.TELEGRAM_API_TOKEN, parse_mode="HTML")
+dp = Dispatcher(storage=storage)
