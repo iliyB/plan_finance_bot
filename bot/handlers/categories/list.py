@@ -7,16 +7,22 @@ from bot.services.categories import CategoryService
 from bot.states import FSMCategory
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.LIST_CATEGORY.value, state=None)
+@dp.callback_query_handler(
+    lambda c: c.data == CommandEnum.LIST_CATEGORY.value, state=None
+)
 async def list_categories(callback_query: types.CallbackQuery) -> None:
     categories = await CategoryService.all_for_user(callback_query.from_user.id)
     if categories:
         await FSMCategory.categories.set()
         await bot.send_message(
-            callback_query.from_user.id, "Ваши категории", reply_markup=create_retrieve_category_keyboard(categories)
+            callback_query.from_user.id,
+            "Ваши категории",
+            reply_markup=create_retrieve_category_keyboard(categories),
         )
     else:
         await bot.send_message(callback_query.from_user.id, "У вас ещё нет категорий")
 
     await bot.answer_callback_query(callback_query.id)
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )

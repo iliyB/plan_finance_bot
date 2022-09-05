@@ -16,16 +16,22 @@ logger = logging.getLogger(__name__)
 class CategoryRepository:
     @staticmethod
     @logging_decorator(logger)
-    async def get_or_create_by_name(category_name: str, return_pydantic: bool = True) -> Tuple[CategoryScheme, bool]:
+    async def get_or_create_by_name(
+        category_name: str, return_pydantic: bool = True
+    ) -> Tuple[CategoryScheme, bool]:
         async with get_async_session() as session:
-            category = await session.execute(select(Category).where(Category.category_name == category_name))
+            category = await session.execute(
+                select(Category).where(Category.category_name == category_name)
+            )
             category = category.scalars().first()
             created = False
 
             if not category:
                 session.add(Category(category_name=category_name))
                 await session.commit()
-                category = await session.execute(select(Category).where(Category.category_name == category_name))
+                category = await session.execute(
+                    select(Category).where(Category.category_name == category_name)
+                )
                 category = category.scalars().first()
                 created = True
 
@@ -39,7 +45,9 @@ class CategoryRepository:
     async def add_user_for_category(category_name: str, user_id: int) -> None:
         async with get_async_session() as session:
             category = await session.execute(
-                select(Category).where(Category.category_name == category_name).options(selectinload(Category.users))
+                select(Category)
+                .where(Category.category_name == category_name)
+                .options(selectinload(Category.users))
             )
             category = category.scalars().first()
             user = await session.get(User, user_id)
@@ -51,15 +59,22 @@ class CategoryRepository:
     @logging_decorator(logger)
     async def all_for_user(user_id: int) -> List[CategoryScheme]:
         async with get_async_session() as session:
-            categories = await session.execute(select(Category).join(Category.users).where(User.user_id.in_([user_id])))
-            return [CategoryScheme.from_orm(category) for category in categories.scalars().all()]
+            categories = await session.execute(
+                select(Category).join(Category.users).where(User.user_id.in_([user_id]))
+            )
+            return [
+                CategoryScheme.from_orm(category)
+                for category in categories.scalars().all()
+            ]
 
     @staticmethod
     @logging_decorator(logger)
     async def delete_category_for_user(category_name: str, user_id: int) -> None:
         async with get_async_session() as session:
             category = await session.execute(
-                select(Category).where(Category.category_name == category_name).options(selectinload(Category.users))
+                select(Category)
+                .where(Category.category_name == category_name)
+                .options(selectinload(Category.users))
             )
             category = category.scalars().first()
 

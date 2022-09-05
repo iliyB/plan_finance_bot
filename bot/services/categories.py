@@ -35,11 +35,14 @@ class CategoryService:
     @staticmethod
     async def all_for_user(user_id: int) -> List[CategoryScheme]:
         logger.debug(f"All categories for {user_id}")
-        return await CategoryRepository.all_for_user(**UserIdScheme(user_id=user_id).dict())
+        return await CategoryRepository.all_for_user(
+            **UserIdScheme(user_id=user_id).dict()
+        )
 
     @staticmethod
     async def delete_for_user(category_name: str, user_id: int) -> None:
         logger.debug(f"Delete category {category_name} for {user_id}")
         return await CategoryRepository.delete_category_for_user(
-            **CategoryNameScheme(category_name=category_name).dict(), **UserIdScheme(user_id=user_id).dict()
+            **CategoryNameScheme(category_name=category_name).dict(),
+            **UserIdScheme(user_id=user_id).dict(),
         )

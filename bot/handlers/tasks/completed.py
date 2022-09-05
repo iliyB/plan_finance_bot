@@ -14,12 +14,18 @@ from bot.services.tasks import TaskService
 from bot.states import FSMCompletedTask, FSMTask
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.COMPLETE_TASK.value, state=FSMTask.task)
-async def start_complete_task(callback_query: types.CallbackQuery, state: FSMContext) -> None:
+@dp.callback_query_handler(
+    lambda c: c.data == CommandEnum.COMPLETE_TASK.value, state=FSMTask.task
+)
+async def start_complete_task(
+    callback_query: types.CallbackQuery, state: FSMContext
+) -> None:
     await FSMCompletedTask.feedback.set()
     await bot.send_message(callback_query.from_user.id, "Введите фидбек по задаче")
     await bot.answer_callback_query(callback_query.id)
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )
 
 
 @dp.message_handler(state=FSMCompletedTask.feedback)
@@ -37,9 +43,15 @@ async def feedback_task(message: types.Message, state: FSMContext) -> None:
     await bot.delete_message(message.from_user.id, message.message_id)
 
 
-@dp.callback_query_handler(simple_cal_callback.filter(), state=FSMCompletedTask.completed_time)
-async def completed_time_task(callback_query: types.CallbackQuery, state: FSMContext, callback_data: Dict) -> None:
-    selected, date = await SimpleCalendar().process_selection(callback_query, callback_data)
+@dp.callback_query_handler(
+    simple_cal_callback.filter(), state=FSMCompletedTask.completed_time
+)
+async def completed_time_task(
+    callback_query: types.CallbackQuery, state: FSMContext, callback_data: Dict
+) -> None:
+    selected, date = await SimpleCalendar().process_selection(
+        callback_query, callback_data
+    )
     if not selected:
         return
     async with state.proxy() as data:
@@ -51,7 +63,9 @@ async def completed_time_task(callback_query: types.CallbackQuery, state: FSMCon
         f"Запланированное затраченное время  - {timeshift if timeshift else 'Нет'}\nУкажите затраченное время",
     )
     await FSMCompletedTask.next()
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )
 
 
 @dp.message_handler(state=FSMCompletedTask.timeshift)

@@ -7,12 +7,16 @@ from bot.services.categories import CategoryService
 from bot.states import FSMAddCategory
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.ADD_CATEGORY.value, state=None)
+@dp.callback_query_handler(
+    lambda c: c.data == CommandEnum.ADD_CATEGORY.value, state=None
+)
 async def add_category_start(callback_query: types.CallbackQuery) -> None:
     await FSMAddCategory.command.set()
     await bot.answer_callback_query(callback_query.id)
     await bot.send_message(callback_query.from_user.id, "Введите название категории")
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )
 
 
 @dp.message_handler(state=FSMAddCategory.command)

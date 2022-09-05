@@ -22,9 +22,15 @@ async def reset_handler_state(message: types.Message, state: FSMContext) -> None
         await state.finish()
 
 
-@dp.callback_query_handler(lambda c: c.data == CommandEnum.RESET.value_with_slash, state="*")
-async def reset_handler_state_callback(callback_query: types.CallbackQuery, state: FSMContext) -> None:
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+@dp.callback_query_handler(
+    lambda c: c.data == CommandEnum.RESET.value_with_slash, state="*"
+)
+async def reset_handler_state_callback(
+    callback_query: types.CallbackQuery, state: FSMContext
+) -> None:
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )
     if await state.get_state():
         await state.finish()
 

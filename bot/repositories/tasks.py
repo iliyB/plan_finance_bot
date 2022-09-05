@@ -72,10 +72,14 @@ class TaskRepository:
 
     @staticmethod
     @logging_decorator(logger)
-    async def planed_tasks_for_user(user_id: int, delta_day: Optional[int] = None) -> List[TaskScheme]:
+    async def planed_tasks_for_user(
+        user_id: int, delta_day: Optional[int] = None
+    ) -> List[TaskScheme]:
         tasks = (
             await TaskRepository._get_user_tasks(
-                user_id, datetime.date.today(), datetime.date.today() + datetime.timedelta(days=delta_day)
+                user_id,
+                datetime.date.today(),
+                datetime.date.today() + datetime.timedelta(days=delta_day),
             )
             if delta_day is not None
             else await TaskRepository._get_user_tasks(user_id, datetime.date.today())
@@ -93,7 +97,9 @@ class TaskRepository:
 
     @staticmethod
     async def _get_user_tasks(
-        user_id: int, first_date: datetime.date, second_date: Optional[datetime.date] = None
+        user_id: int,
+        first_date: datetime.date,
+        second_date: Optional[datetime.date] = None,
     ) -> List[Task]:
         async with get_async_session() as session:
             user = await session.get(User, user_id)

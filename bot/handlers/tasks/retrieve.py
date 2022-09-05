@@ -11,7 +11,9 @@ from bot.services.tasks import TaskService
 from bot.states import FSMTask
 
 
-@dp.callback_query_handler(lambda c: re.match("task_[0-9]*", c.data), state=FSMTask.tasks)
+@dp.callback_query_handler(
+    lambda c: re.match("task_[0-9]*", c.data), state=FSMTask.tasks
+)
 async def retrieve_task(callback_query: types.CallbackQuery, state: FSMContext) -> None:
     task = await TaskService.get_task(int(callback_query.data.split("_")[-1]))
     if not task:
@@ -28,5 +30,9 @@ async def retrieve_task(callback_query: types.CallbackQuery, state: FSMContext) 
         f"{hbold(task.timeshift)}"
     )
     await FSMTask.next()
-    await bot.send_message(callback_query.from_user.id, task_card, reply_markup=retrieve_task_keyboard)
-    await bot.delete_message(callback_query.from_user.id, callback_query.message.message_id)
+    await bot.send_message(
+        callback_query.from_user.id, task_card, reply_markup=retrieve_task_keyboard
+    )
+    await bot.delete_message(
+        callback_query.from_user.id, callback_query.message.message_id
+    )
