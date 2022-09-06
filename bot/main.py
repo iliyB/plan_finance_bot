@@ -7,7 +7,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from config import configs
 
-from .bot import bot, dp
+from bot import bot, dp  # type: ignore
 
 rout = Router()
 
