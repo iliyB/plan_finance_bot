@@ -22,7 +22,7 @@ async def main() -> None:
         dp.include_router(rout)
         await dp.start_polling(bot)
     else:
-        logging.critical("Webhook logics not supported")
+        logging.critical("Webhook logics not supported)")
 
 
 if __name__ == "__main__":
