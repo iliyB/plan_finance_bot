@@ -1,8 +1,13 @@
+import sys
+
+from config import configs
+from py_singleton import singleton
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from bot.config import configs
+# sys.path = ['', 'bt'] + sys.path[1:]
+
 
 SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
     configs.POSTGRES_USER,
@@ -15,30 +20,14 @@ SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://{}:{}@{}:{}/{}".format(
 Base = declarative_base()
 
 
+@singleton
 class Database:
-    __instance = None
-
-    def __init__(self) -> None:
-        if not Database.__instance:
-            self.engine = create_async_engine(
-                SQLALCHEMY_DATABASE_URL,
-                echo=True,
-            )
-
-            self.async_session = sessionmaker(
-                self.engine, expire_on_commit=False, class_=AsyncSession
-            )
-
-    @classmethod
-    def getInstance(cls) -> object:
-        if not cls.__instance:
-            cls.__instance = Database()
-        return cls.__instance
+    engine = create_async_engine(
+        SQLALCHEMY_DATABASE_URL,
+        echo=False,
+    )
+    async_session = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
-def get_async_session() -> sessionmaker:
-    return Database().async_session()
-
-
-def get_engine() -> sessionmaker:
+def get_async_session() -> AsyncSession:
     return Database().async_session()

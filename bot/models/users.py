@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from datetime import datetime
 
-from bot.core.database import Base
-from bot.models.many_to_many import UserCategory
+from core.database import Base
+from models.many_to_many import UserCategory
+from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
 
 
 class User(Base):
@@ -20,3 +21,5 @@ class User(Base):
         "Category", secondary=UserCategory, back_populates="users"
     )
     tasks = relationship("Task", back_populates="user")
+
+    created_at = Column(DateTime(timezone=True), default=datetime.utcnow)

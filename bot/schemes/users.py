@@ -1,10 +1,11 @@
-from pydantic import BaseModel
-from pydantic_sqlalchemy import sqlalchemy_to_pydantic
+from typing import Optional
 
-from bot.models.users import User
-
-UserScheme = sqlalchemy_to_pydantic(User)
+from pydantic import BaseModel, Field
 
 
-class UserIdScheme(BaseModel):
+class UserCreateSchema(BaseModel):
     user_id: int
+    first_name: Optional[str] = Field(None, max_length=64)
+    last_name: Optional[str] = Field(None, max_length=64)
+    username: str = Field(..., max_length=64)
+    language_code: Optional[str] = Field(..., max_length=64)

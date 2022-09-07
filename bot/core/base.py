@@ -1,3 +1,3 @@
-from bot.models import *
+from models import *
 
 from .database import Base

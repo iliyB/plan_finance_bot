@@ -6,10 +6,10 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
-sys.path = ['', '..'] + sys.path[1:]
+sys.path = ['', '/app/bot'] + sys.path[1:]
 
-from bot.core.database import SQLALCHEMY_DATABASE_URL
-from bot.core.base import Base
+from core.database import SQLALCHEMY_DATABASE_URL
+from core.base import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -1,6 +1,5 @@
+from core.database import Base
 from sqlalchemy import Column, ForeignKey, Table, UniqueConstraint
-
-from bot.core.database import Base
 
 UserCategory = Table(
     "user_category_associated",

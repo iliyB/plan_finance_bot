@@ -2,24 +2,20 @@ import asyncio
 import logging
 import sys
 
-from aiogram import Router
-from aiogram.filters import Command
-from aiogram.types import Message
 from config import configs
+from handlers.categories import category_router
+from handlers.general import general_router
+from middlewares.authorization import AuthorizationMiddleware
 
-from bot import bot, dp  # type: ignore
-
-rout = Router()
-
-
-@rout.message(Command(commands=["eqw"]))
-async def command_start(message: Message) -> None:
-    await message.answer("Test")
+from bot import bot, dp
 
 
 async def main() -> None:
     if configs.POLLING:
-        dp.include_router(rout)
+        dp.include_router(category_router)
+        dp.include_router(general_router)
+        dp.message.middleware(AuthorizationMiddleware())
+        dp.callback_query.middleware(AuthorizationMiddleware())
         await dp.start_polling(bot)
     else:
         logging.critical("Webhook logics not supported)")

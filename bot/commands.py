@@ -10,7 +10,7 @@ class CommandEnum(Enum):
     ADD_CATEGORY = "Добавить категорию"
     LIST_CATEGORY = "Мои категории"
     FILTER_CATEGORY = "Фильтрация категорий"
-    DEL_CATEGORY = "Удалить категорию"
+    DELETE_CATEGORY = "Удалить категорию"
 
     TASK_KEYBOARD = "Задачи"
     ADD_TASK = "Добавить задачу"
@@ -24,7 +24,7 @@ class CommandEnum(Enum):
 
     COMPLETE_TASK = "Выполнить задачу"
     CHANGE_TASK = "Редактировать задачу"
-    DEL_TASK = "Удалить задачу"
+    DELETE_TASK = "Удалить задачу"
 
     @property
     def value_with_slash(self) -> str:

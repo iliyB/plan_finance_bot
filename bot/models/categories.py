@@ -1,8 +1,7 @@
+from core.database import Base
+from models.many_to_many import UserCategory
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-
-from bot.core.database import Base
-from bot.models.many_to_many import UserCategory
 
 
 class Category(Base):

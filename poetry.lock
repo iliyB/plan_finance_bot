@@ -250,6 +250,14 @@ python-versions = ">=3.6"
 pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
+name = "py-singleton"
+version = "1.0.0"
+description = "singleton pattern for python 2 and 3"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pydantic"
 version = "1.10.1"
 description = "Data validation and settings management using python type hints"
@@ -382,7 +390,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "227367fa685098f204b42f0fff175644116adbfe819be7a15dbba454974b7ef9"
+content-hash = "b4a8403ff402545df2afc9b2872af2ba94a420329ceb401afcc7e4c5d1b4c468"
 
 [metadata.files]
 aiofiles = [
@@ -764,6 +772,9 @@ multidict = [
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
+]
+py-singleton = [
+    {file = "py-singleton-1.0.0.tar.gz", hash = "sha256:9922a69f6e6b9390e5c1b3d2b39e119d5fcffa92d9c3145de3b8533a93077fb7"},
 ]
 pydantic = [
     {file = "pydantic-1.10.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:221166d99726238f71adc4fa9f3e94063a10787574b966f86a774559e709ac5a"},

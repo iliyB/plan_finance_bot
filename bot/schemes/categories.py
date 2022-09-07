@@ -1,9 +1,14 @@
 from pydantic import BaseModel, Field
-from pydantic_sqlalchemy import sqlalchemy_to_pydantic
 
-from bot.models.categories import Category
+# from pydantic_sqlalchemy import sqlalchemy_to_pydantic
 
-CategoryScheme = sqlalchemy_to_pydantic(Category)
+# from bot.models.categories import Category
+
+# CategoryScheme = sqlalchemy_to_pydantic(Category)
+
+
+class CategoryScheme(BaseModel):
+    category_name: str = Field(max_length=32)
 
 
 class CategoryNameScheme(BaseModel):

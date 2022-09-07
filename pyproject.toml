@@ -19,6 +19,7 @@ aioredis = "^2.0.1"
 emoji = "^2.0.0"
 redis = "^4.3.4"
 alembic = "^1.8.1"
+py-singleton = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 
