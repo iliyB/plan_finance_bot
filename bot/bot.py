@@ -1,4 +1,4 @@
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.redis import RedisStorage
 from config import configs
 

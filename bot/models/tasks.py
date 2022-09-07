@@ -21,27 +21,31 @@ class BaseWithTimeshift(Base):
 
     timeshift = Column(SmallInteger, nullable=True)
 
-    __table_args__ = (CheckConstraint("timeshift > 0", name="check_positive_timeshift"), {})  # type: ignore
+    __table_args__ = (
+        CheckConstraint("timeshift > 0", name="check_positive_timeshift"),
+    )
 
 
 class CompletedTask(BaseWithTimeshift):
     __tablename__ = "completed_task"
 
-    completed_task_id = Column(Integer, primary_key=True, index=True, unique=True)
+    completed_task_id = Column(Integer, primary_key=True)
     feedback = Column(String, nullable=True)
     completed_time = Column(DateTime)
 
-    task_id = Column(Integer, ForeignKey("task.task_id"))
+    task_id = Column(Integer, ForeignKey("task.task_id"), unique=True)
     task = relationship("Task", back_populates="completed_task", uselist=False)
 
 
 class Task(BaseWithTimeshift):
     __tablename__ = "task"
 
-    task_id = Column(Integer, primary_key=True, index=True, unique=True)
+    task_id = Column(Integer, primary_key=True)
     description = Column(Text, nullable=True)
     links = Column(ARRAY(String), nullable=True)
-    planed_time = Column(Date, nullable=True)
+
+    planed_start_date = Column(Date, nullable=True)
+    planed_end_date = Column(Date, nullable=True)
     is_completed = Column(Boolean, default=False)
 
     user_id = Column(Integer, ForeignKey("user.user_id"))
