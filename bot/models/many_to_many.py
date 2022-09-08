@@ -1,7 +1,7 @@
 from core.database import Base
 from sqlalchemy import Column, ForeignKey, Table, UniqueConstraint
 
-UserCategory = Table(
+UserCategoryAssociatedTable = Table(
     "user_category_associated",
     Base.metadata,
     Column("user_id", ForeignKey("user.user_id")),

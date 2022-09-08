@@ -1,87 +1,87 @@
 import logging
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 
+from models.categories import Category
+from models.many_to_many import UserCategoryAssociatedTable
+from models.users import User
+from sqlalchemy import insert
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-
-from bot.core.database import get_async_session
-from bot.loggers.decorates import logging_decorator
-from bot.models.categories import Category
-from bot.models.users import User
-from bot.schemes.categories import CategoryScheme
 
 logger = logging.getLogger(__name__)
 
 
 class CategoryRepository:
-    @staticmethod
-    @logging_decorator(logger)
-    async def get_or_create_by_name(
-        category_name: str, return_pydantic: bool = True
-    ) -> Tuple[CategoryScheme, bool]:
-        async with get_async_session() as session:
-            category = await session.execute(
-                select(Category).where(Category.category_name == category_name)
-            )
-            category = category.scalars().first()
-            created = False
+    category_model = Category
+    user_model = User
+    associate_model = UserCategoryAssociatedTable
 
-            if not category:
-                session.add(Category(category_name=category_name))
-                await session.commit()
-                category = await session.execute(
-                    select(Category).where(Category.category_name == category_name)
+    def __init__(self, get_db_session: Callable[[], AsyncSession]) -> None:
+        self.get_db_session = get_db_session
+
+    async def get_or_create_category_by_name(
+        self, category_name: str
+    ) -> Tuple[Category, bool]:
+        async with self.get_db_session() as session:
+            result = await session.execute(
+                select(self.category_model).where(
+                    self.category_model.category_name == category_name
                 )
-                category = category.scalars().first()
-                created = True
-
-            if not return_pydantic:
-                return category, created
-
-            return CategoryScheme.from_orm(category), created
-
-    @staticmethod
-    @logging_decorator(logger)
-    async def add_user_for_category(category_name: str, user_id: int) -> None:
-        async with get_async_session() as session:
-            category = await session.execute(
-                select(Category)
-                .where(Category.category_name == category_name)
-                .options(selectinload(Category.users))
             )
-            category = category.scalars().first()
-            user = await session.get(User, user_id)
-            category.users.append(user)
-            session.add(category)
-            await session.commit()
-
-    @staticmethod
-    @logging_decorator(logger)
-    async def all_for_user(user_id: int) -> List[CategoryScheme]:
-        async with get_async_session() as session:
-            categories = await session.execute(
-                select(Category).join(Category.users).where(User.user_id.in_([user_id]))
-            )
-            return [
-                CategoryScheme.from_orm(category)
-                for category in categories.scalars().all()
-            ]
-
-    @staticmethod
-    @logging_decorator(logger)
-    async def delete_category_for_user(category_name: str, user_id: int) -> None:
-        async with get_async_session() as session:
-            category = await session.execute(
-                select(Category)
-                .where(Category.category_name == category_name)
-                .options(selectinload(Category.users))
-            )
-            category = category.scalars().first()
+            category = result.scalars().first()
 
             if not category:
-                return
+                category = self.category_model(category_name=category_name)
+                session.add(category)
+                await session.commit()
+                return category, True
 
-            user = await session.get(User, user_id)
-            category.users.remove(user)
-            session.add(category)
-            await session.commit()
+        return category, False
+
+    async def add_user_for_category(self, category_id: int, user_id: int) -> None:
+        async with self.get_db_session() as session:
+            try:
+                await session.execute(
+                    insert(self.associate_model).values(
+                        category_id=category_id, user_id=user_id
+                    )
+                )
+                await session.commit()
+            except (IntegrityError, InvalidRequestError):
+                pass
+
+        return None
+
+    async def list_user_categories(self, user: User) -> List[Category]:
+        async with self.get_db_session() as session:
+            result = await session.execute(
+                select(self.category_model)
+                .join(self.category_model.users)
+                .where(self.user_model.user_id == user.user_id)
+            )
+            categories = result.scalars().all()
+
+            return categories
+
+    async def delete_category_for_user(self, category_name: str, user: User) -> None:
+        async with self.get_db_session() as session:
+            result = await session.execute(
+                select(self.category_model)
+                .where(self.category_model.category_name == category_name)
+                .options(selectinload(self.category_model.users))
+            )
+            category = result.scalars().first()
+
+            if not category:
+                return None
+
+            try:
+                category.users.remove(user)
+                session.add(category)
+                await session.commit()
+            except ValueError:
+                pass
+
+            return None

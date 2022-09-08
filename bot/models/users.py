@@ -1,12 +1,13 @@
 from datetime import datetime
 
 from core.database import Base
-from models.many_to_many import UserCategory
+from models.many_to_many import UserCategoryAssociatedTable
+from models.mixins import EqMixin
 from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
 
 
-class User(Base):
+class User(Base, EqMixin):
     __tablename__ = "user"
 
     user_id = Column(Integer, primary_key=True)
@@ -18,7 +19,7 @@ class User(Base):
     timezone = Column(String(32), nullable=True)
 
     categories = relationship(
-        "Category", secondary=UserCategory, back_populates="users"
+        "Category", secondary=UserCategoryAssociatedTable, back_populates="users"
     )
     tasks = relationship("Task", back_populates="user")
 

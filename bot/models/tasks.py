@@ -1,4 +1,5 @@
 from core.database import Base
+from models.mixins import EqMixin
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
@@ -25,7 +26,7 @@ class BaseWithTimeshift(Base):
     )
 
 
-class CompletedTask(BaseWithTimeshift):
+class CompletedTask(BaseWithTimeshift, EqMixin):
     __tablename__ = "completed_task"
 
     completed_task_id = Column(Integer, primary_key=True)
@@ -36,7 +37,7 @@ class CompletedTask(BaseWithTimeshift):
     task = relationship("Task", back_populates="completed_task", uselist=False)
 
 
-class Task(BaseWithTimeshift):
+class Task(BaseWithTimeshift, EqMixin):
     __tablename__ = "task"
 
     task_id = Column(Integer, primary_key=True)

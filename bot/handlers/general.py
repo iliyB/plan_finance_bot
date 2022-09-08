@@ -1,4 +1,4 @@
-from aiogram import Router, types
+from aiogram import F, Router, types
 from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 from commands import CommandEnum
@@ -22,12 +22,10 @@ async def start_command(message: types.Message) -> None:
 async def reset_handler_state(message: types.Message, state: FSMContext) -> None:
     await bot.delete_message(message.from_user.id, message.message_id)
     if await state.get_state():
-        await state.finish()
+        await state.clear()
 
 
-@general_router.callback_query(
-    lambda c: c.data == CommandEnum.RESET.value_with_slash, state="*"
-)
+@general_router.callback_query(F.data == CommandEnum.RESET.value_with_slash, state="*")
 async def reset_handler_state_callback(
     callback_query: types.CallbackQuery, state: FSMContext
 ) -> None:
@@ -35,4 +33,4 @@ async def reset_handler_state_callback(
         callback_query.from_user.id, callback_query.message.message_id
     )
     if await state.get_state():
-        await state.finish()
+        await state.clear()
